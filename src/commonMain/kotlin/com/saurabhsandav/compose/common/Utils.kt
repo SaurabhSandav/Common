@@ -10,6 +10,14 @@ public inline fun <T> state(value: @DisallowComposableCalls () -> T): MutableSta
 }
 
 @Composable
+public inline fun <T> state(
+    key1: Any?,
+    value: @DisallowComposableCalls () -> T
+): MutableState<T> {
+    return remember(key1) { mutableStateOf(value()) }
+}
+
+@Composable
 public fun requireSaveableStateRegistry(): SaveableStateRegistry {
     return LocalSaveableStateRegistry.current ?: error("SaveableStateRegistry is cannot be null")
 }

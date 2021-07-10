@@ -3,7 +3,7 @@ plugins {
     id("com.android.library") version "4.1.1"
     kotlin("multiplatform") version "1.5.10"
     kotlin("plugin.serialization") version "1.5.10"
-    id("org.jetbrains.compose") version "0.5.0-build225"
+    id("org.jetbrains.compose") version "0.5.0-build228"
     id("maven-publish")
 }
 
@@ -65,7 +65,7 @@ kotlin {
                 implementation(libs.activity.compose)
 
                 // Accompanist
-                implementation(libs.accompanist.insets)
+                api(libs.accompanist.insets)
 
                 // Bundlizer
                 implementation(libs.bundlizer)

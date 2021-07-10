@@ -19,15 +19,11 @@ public fun <Original, Saveable : Any> SaveableStateRegistry.registerProvider(
     saver: Saver<Original, Saveable>,
     canBeSaved: (Any) -> Boolean = this::canBeSaved,
     toSave: () -> Original,
-) {
+): SaveableStateRegistry.Entry {
 
-    val saverScope = SaverScope(canBeSaved)
-
-    registerProvider(key) {
+    return registerProvider(key) {
         with(saver) {
-            with(saverScope) {
-                save(toSave())
-            }
+            SaverScope(canBeSaved).save(toSave())
         }
     }
 }

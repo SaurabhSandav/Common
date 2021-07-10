@@ -1,6 +1,7 @@
 package com.saurabhsandav.compose.common.router
 
 import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.runtime.saveable.Saver
 import com.saurabhsandav.compose.common.saveable.PlatformSaver
 import com.saurabhsandav.compose.common.saveable.consumeRestored
 import com.saurabhsandav.compose.common.saveable.registerProvider
@@ -16,9 +17,10 @@ internal class BackStack<T : Any>(
     saveableStateRegistry: SaveableStateRegistry,
 ) {
 
-    private val saver = PlatformSaver(BackStackSaver.serializer(routeSerializer))
+    private val saver: Saver<BackStackSaver<T>, Any> =
+        PlatformSaver(serializer = BackStackSaver.serializer(routeSerializer))
 
-    private val restoredStartRoute = saveableStateRegistry.consumeRestored(
+    private val restoredStartRoute: BackStackSaver<T> = saveableStateRegistry.consumeRestored(
         key = key,
         saver = saver,
         default = { BackStackSaver(listOf(startRoute)) }
