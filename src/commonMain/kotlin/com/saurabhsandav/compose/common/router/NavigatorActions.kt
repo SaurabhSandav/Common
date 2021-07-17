@@ -4,9 +4,12 @@ public class NavigatorActions<T : Any> internal constructor(
     private val backStack: BackStack<T>,
 ) {
 
-    public fun push(newRoute: T) {
+    public fun push(
+        newRoute: T,
+        popWhile: (T) -> Boolean = { false },
+    ) {
         backStack.transform {
-            it.plus(newRoute)
+            it.dropLastWhile(popWhile) + newRoute
         }
     }
 
