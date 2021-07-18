@@ -12,6 +12,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 public abstract class Presenter(
     private val saveableStateRegistry: SaveableStateRegistry
@@ -21,27 +23,38 @@ public abstract class Presenter(
 
     protected val viewModelScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    protected inline fun <reified T : Any> save(
+    protected inline fun <T, reified V : Any> saved(
         key: String? = null,
-        noinline block: () -> T,
-    ): T = save(serializer(), key, block)
+        noinline block: () -> V,
+    ): ReadWriteProperty<T, V> = saved(serializer(), key, block)
 
-    protected fun <T : Any> save(
-        serializer: KSerializer<T>,
+    protected fun <T, V : Any> saved(
+        serializer: KSerializer<V>,
         key: String? = null,
-        block: () -> T,
-    ): T = with(saveableStateRegistry) {
+        block: () -> V,
+    ): ReadWriteProperty<T, V> = with(saveableStateRegistry) {
 
         val finalKey = key ?: createSaveableKey()
 
         val saver = PlatformSaver(serializer)
 
-        val value = consumeRestored(finalKey, saver, block)
-        val entry = registerProvider(finalKey, saver) { value }
+        return@with object : ReadWriteProperty<T, V> {
 
-        saveableProviderEntries.add(entry)
+            private var value = consumeRestored(finalKey, saver, block)
 
-        return value
+            init {
+
+                val entry = registerProvider(finalKey, saver) { value }
+
+                saveableProviderEntries.add(entry)
+            }
+
+            override fun getValue(thisRef: T, property: KProperty<*>): V = value
+
+            override fun setValue(thisRef: T, property: KProperty<*>, value: V) {
+                this.value = value
+            }
+        }
     }
 
     protected inline fun <reified T : Any> saveableStateFlow(
