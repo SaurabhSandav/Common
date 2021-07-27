@@ -36,6 +36,7 @@ kotlin {
 
             listOf(
                 "androidx.compose.ui.ExperimentalComposeUiApi",
+                "kotlinx.coroutines.ExperimentalCoroutinesApi",
             ).forEach(languageSettings::useExperimentalAnnotation)
         }
 
@@ -48,11 +49,23 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
 
-                // Kotlin Serialization
+                // KotlinX Coroutines
+                implementation(libs.kotlinx.coroutines.core)
+
+                // KotlinX Serialization
                 implementation(libs.kotlinx.serialization.core)
 
                 // Napier
                 implementation(libs.napier)
+            }
+        }
+
+        named("commonTest") {
+
+            dependencies {
+
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
             }
         }
 
@@ -68,6 +81,24 @@ kotlin {
 
                 // Bundlizer
                 implementation(libs.bundlizer)
+            }
+        }
+
+        named("androidTest") {
+
+            dependencies {
+
+                implementation(kotlin("test"))
+                implementation(kotlin("test-junit"))
+            }
+        }
+
+        named("jvmTest") {
+
+            dependencies {
+
+                implementation(kotlin("test"))
+                implementation(kotlin("test-junit"))
             }
         }
     }
