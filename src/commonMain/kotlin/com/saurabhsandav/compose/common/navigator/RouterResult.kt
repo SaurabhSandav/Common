@@ -1,4 +1,4 @@
-package com.saurabhsandav.compose.common.router
+package com.saurabhsandav.compose.common.navigator
 
 public class RouterResultHandler {
 

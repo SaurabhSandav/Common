@@ -1,4 +1,4 @@
-package com.saurabhsandav.compose.common.router
+package com.saurabhsandav.compose.common.navigator
 
 public class NavigatorActions<ROUTE : Any> internal constructor(
     private val backStack: BackStack<ROUTE>,

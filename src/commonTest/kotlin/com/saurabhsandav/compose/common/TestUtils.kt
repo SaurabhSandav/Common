@@ -1,8 +1,8 @@
 package com.saurabhsandav.compose.common
 
 import androidx.compose.runtime.saveable.SaveableStateRegistry
-import com.saurabhsandav.compose.common.router.BackStack
-import com.saurabhsandav.compose.common.router.NavigatorActions
+import com.saurabhsandav.compose.common.navigator.BackStack
+import com.saurabhsandav.compose.common.navigator.NavigatorActions
 import kotlinx.serialization.builtins.serializer
 
 internal fun createRegistry(
