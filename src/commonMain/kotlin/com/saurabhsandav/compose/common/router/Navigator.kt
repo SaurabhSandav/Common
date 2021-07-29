@@ -7,11 +7,11 @@ import com.saurabhsandav.compose.common.requireSaveableStateRegistry
 import kotlinx.serialization.KSerializer
 
 @Composable
-public fun <T : Any> Navigator(
-    startRoute: T,
-    routeSerializer: KSerializer<T>,
+public fun <ROUTE : Any> Navigator(
+    startRoute: ROUTE,
+    routeSerializer: KSerializer<ROUTE>,
     key: String = "RootRouter",
-    content: @Composable NavigatorActions<T>.(T, RouterResultHandler) -> Unit,
+    content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouterResultHandler) -> Unit,
 ) {
 
     val saveableStateRegistry = requireSaveableStateRegistry()
@@ -36,19 +36,19 @@ public fun <T : Any> Navigator(
 }
 
 @Composable
-private fun <T : Any> WithSaveableState(
-    currentRoute: T,
-    backStack: BackStack<T>,
+private fun <ROUTE : Any> WithSaveableState(
+    currentRoute: ROUTE,
+    backStack: BackStack<ROUTE>,
     content: @Composable () -> Unit,
 ) {
 
     val saveableStateHolder = rememberSaveableStateHolder()
 
     val onPopListener = remember {
-        object : BackStackListener<T> {
-            override fun onAdded(route: T, routeKey: String) {}
+        object : BackStackListener<ROUTE> {
+            override fun onAdded(route: ROUTE, routeKey: String) {}
 
-            override fun onRemoved(route: T, routeKey: String) {
+            override fun onRemoved(route: ROUTE, routeKey: String) {
                 saveableStateHolder.removeState(routeKey)
             }
         }

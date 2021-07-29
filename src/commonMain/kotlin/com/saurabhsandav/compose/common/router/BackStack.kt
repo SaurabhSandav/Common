@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 
-internal class BackStack<T : Any>(
-    startRoute: T,
-    routeSerializer: KSerializer<T>,
+internal class BackStack<ROUTE : Any>(
+    startRoute: ROUTE,
+    routeSerializer: KSerializer<ROUTE>,
     private val key: String,
     saveableStateRegistry: SaveableStateRegistry,
 ) : Presenter(saveableStateRegistry) {
@@ -16,9 +16,9 @@ internal class BackStack<T : Any>(
     private val _current = saveableStateFlow(ListSerializer(routeSerializer)) { listOf(startRoute) }
     val current = _current.asStateFlow()
 
-    private val listeners = mutableListOf<BackStackListener<T>>()
+    private val listeners = mutableListOf<BackStackListener<ROUTE>>()
 
-    fun transform(transformation: (List<T>) -> List<T>) {
+    fun transform(transformation: (List<ROUTE>) -> List<ROUTE>) {
 
         val currentBackStack = current.value
         val transformedBackStack = transformation(currentBackStack)
@@ -36,24 +36,24 @@ internal class BackStack<T : Any>(
         }
     }
 
-    fun getEntryKey(route: T): String = getEntryKey(route, current.value)
+    fun getEntryKey(route: ROUTE): String = getEntryKey(route, current.value)
 
-    fun addListener(listener: BackStackListener<T>) {
+    fun addListener(listener: BackStackListener<ROUTE>) {
         listeners.add(listener)
     }
 
-    fun removeListener(listener: BackStackListener<T>) {
+    fun removeListener(listener: BackStackListener<ROUTE>) {
         listeners.remove(listener)
     }
 
-    private fun getEntryKey(route: T, backStack: List<T>): String {
+    private fun getEntryKey(route: ROUTE, backStack: List<ROUTE>): String {
         return "${key}_${backStack.indexOf(route)}"
     }
 }
 
-internal interface BackStackListener<T : Any> {
+internal interface BackStackListener<ROUTE : Any> {
 
-    fun onAdded(route: T, routeKey: String)
+    fun onAdded(route: ROUTE, routeKey: String)
 
-    fun onRemoved(route: T, routeKey: String)
+    fun onRemoved(route: ROUTE, routeKey: String)
 }

@@ -1,12 +1,12 @@
 package com.saurabhsandav.compose.common.router
 
-public class NavigatorActions<T : Any> internal constructor(
-    private val backStack: BackStack<T>,
+public class NavigatorActions<ROUTE : Any> internal constructor(
+    private val backStack: BackStack<ROUTE>,
 ) {
 
     public fun push(
-        newRoute: T,
-        popWhile: (T) -> Boolean = { false },
+        newRoute: ROUTE,
+        popWhile: (ROUTE) -> Boolean = { false },
     ) {
         backStack.transform {
             it.dropLastWhile(popWhile) + newRoute
@@ -24,7 +24,7 @@ public class NavigatorActions<T : Any> internal constructor(
     }
 }
 
-public fun <T : Any> NavigatorActions<T>.replace(newRoute: T) {
+public fun <ROUTE : Any> NavigatorActions<ROUTE>.replace(newRoute: ROUTE) {
 
     var poppedLast = false
 
