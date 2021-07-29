@@ -1,44 +1,22 @@
 package com.saurabhsandav.compose.common.router
 
 import androidx.compose.runtime.saveable.SaveableStateRegistry
-import androidx.compose.runtime.saveable.Saver
-import com.saurabhsandav.compose.common.saveable.PlatformSaver
-import com.saurabhsandav.compose.common.saveable.consumeRestored
-import com.saurabhsandav.compose.common.saveable.registerProvider
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.saurabhsandav.compose.common.presenter.Presenter
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
 
 internal class BackStack<T : Any>(
     startRoute: T,
     routeSerializer: KSerializer<T>,
     private val key: String,
     saveableStateRegistry: SaveableStateRegistry,
-) {
+) : Presenter(saveableStateRegistry) {
 
-    private val saver: Saver<BackStackSaver<T>, Any> =
-        PlatformSaver(serializer = BackStackSaver.serializer(routeSerializer))
-
-    private val restoredStartRoute: BackStackSaver<T> = saveableStateRegistry.consumeRestored(
-        key = key,
-        saver = saver,
-        default = { BackStackSaver(listOf(startRoute)) }
-    )
-
-    private val _current = MutableStateFlow(restoredStartRoute.backStack)
+    private val _current = saveableStateFlow(ListSerializer(routeSerializer)) { listOf(startRoute) }
     val current = _current.asStateFlow()
 
     private val listeners = mutableListOf<BackStackListener<T>>()
-
-    init {
-
-        saveableStateRegistry.registerProvider(
-            key = key,
-            saver = saver,
-            toSave = { BackStackSaver(current.value) }
-        )
-    }
 
     fun transform(transformation: (List<T>) -> List<T>) {
 
@@ -71,10 +49,6 @@ internal class BackStack<T : Any>(
     private fun getEntryKey(route: T, backStack: List<T>): String {
         return "${key}_${backStack.indexOf(route)}"
     }
-
-    // Serializing List directly to Bundle seems to be unsupported
-    @Serializable
-    private class BackStackSaver<T>(val backStack: List<T>)
 }
 
 internal interface BackStackListener<T : Any> {
