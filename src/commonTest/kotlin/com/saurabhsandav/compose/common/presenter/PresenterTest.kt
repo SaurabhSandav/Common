@@ -1,6 +1,7 @@
 package com.saurabhsandav.compose.common.presenter
 
 import androidx.compose.runtime.saveable.SaveableStateRegistry
+import com.saurabhsandav.compose.common.createRegistry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -50,10 +51,6 @@ class PresenterTest {
             assertEquals(updatedFlowValue, flow.value)
         }
     }
-
-    private fun createRegistry(
-        restored: Map<String, List<Any?>>? = null,
-    ) = SaveableStateRegistry(restored) { true }
 
     private class TestPresenter(
         saveableStateRegistry: SaveableStateRegistry

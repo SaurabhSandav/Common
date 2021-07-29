@@ -1,7 +1,6 @@
 package com.saurabhsandav.compose.common.router
 
-import androidx.compose.runtime.saveable.SaveableStateRegistry
-import kotlinx.serialization.builtins.serializer
+import com.saurabhsandav.compose.common.createBackStack
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -65,17 +64,4 @@ class BackStackTest {
         backStack.transform { it.dropLast(1) }
         assertEquals(removed, newRoute)
     }
-
-    private fun createBackStack(
-        initialRoute: String,
-    ) = BackStack(
-        startRoute = initialRoute,
-        routeSerializer = String.serializer(),
-        key = "Test",
-        saveableStateRegistry = createRegistry()
-    )
-
-    private fun createRegistry(
-        restored: Map<String, List<Any?>>? = null,
-    ) = SaveableStateRegistry(restored) { true }
 }

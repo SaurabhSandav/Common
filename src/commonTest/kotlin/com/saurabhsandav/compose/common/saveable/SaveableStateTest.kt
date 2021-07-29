@@ -1,7 +1,7 @@
 package com.saurabhsandav.compose.common.saveable
 
-import androidx.compose.runtime.saveable.SaveableStateRegistry
 import androidx.compose.runtime.saveable.autoSaver
+import com.saurabhsandav.compose.common.createRegistry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -23,8 +23,4 @@ class SaveableStateTest {
 
         assertEquals(saveStr, restored)
     }
-
-    private fun createRegistry(
-        restored: Map<String, List<Any?>>? = null,
-    ) = SaveableStateRegistry(restored) { true }
 }

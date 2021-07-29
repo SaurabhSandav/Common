@@ -1,7 +1,7 @@
 package com.saurabhsandav.compose.common.router
 
-import androidx.compose.runtime.saveable.SaveableStateRegistry
-import kotlinx.serialization.builtins.serializer
+import com.saurabhsandav.compose.common.createBackStack
+import com.saurabhsandav.compose.common.createNavigatorActions
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -65,19 +65,4 @@ class NavigatorActionsTest {
 
         assertEquals(replacementRoute, backStack.current.value.last())
     }
-
-    private fun createNavigatorActions(backStack: BackStack<String>) = NavigatorActions(backStack)
-
-    private fun createBackStack(
-        initialRoute: String,
-    ) = BackStack(
-        startRoute = initialRoute,
-        routeSerializer = String.serializer(),
-        key = "Test",
-        saveableStateRegistry = createRegistry()
-    )
-
-    private fun createRegistry(
-        restored: Map<String, List<Any?>>? = null,
-    ) = SaveableStateRegistry(restored) { true }
 }
