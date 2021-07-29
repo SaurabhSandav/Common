@@ -1,6 +1,6 @@
 plugins {
     id("com.github.ben-manes.versions") version "0.39.0"
-    id("com.android.library") version "4.1.1"
+    id("com.android.library") version "4.2.0"
     kotlin("multiplatform") version "1.5.10"
     kotlin("plugin.serialization") version "1.5.10"
     id("org.jetbrains.compose") version "0.5.0-build228"
@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.saurabhsandav.compose"
-version = "0.0.1"
+version = "0.0.3"
 
 repositories {
     google()
@@ -106,11 +106,11 @@ kotlin {
 
 android {
 
-    compileSdkVersion(30)
+    compileSdkVersion(31)
 
     defaultConfig {
         minSdkVersion(28)
-        targetSdkVersion(30)
+        targetSdkVersion(31)
     }
 
     compileOptions {
