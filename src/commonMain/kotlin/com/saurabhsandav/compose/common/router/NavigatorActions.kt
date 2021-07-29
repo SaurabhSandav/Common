@@ -13,20 +13,23 @@ public class NavigatorActions<T : Any> internal constructor(
         }
     }
 
-    public fun pop(): Boolean {
-
-        var result = false
+    public fun pop() {
 
         backStack.transform {
             when {
-                it.size > 1 -> {
-                    result = true
-                    it.dropLast(1)
-                }
+                it.size > 1 -> it.dropLast(1)
                 else -> it
             }
         }
+    }
+}
 
-        return result
+public fun <T : Any> NavigatorActions<T>.replace(newRoute: T) {
+
+    var poppedLast = false
+
+    push(newRoute) {
+        if (!poppedLast) poppedLast = true
+        true
     }
 }
