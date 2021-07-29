@@ -1,10 +1,7 @@
 package com.saurabhsandav.compose.common.router
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import com.saurabhsandav.compose.common.requireSaveableStateRegistry
 import kotlinx.serialization.KSerializer
@@ -22,9 +19,13 @@ public fun <T : Any> Navigator(
     val navigatorActions = remember { NavigatorActions(backStack) }
     val routerResultHandler = remember { RouterResultHandler() }
 
-    BackHandler(backStack, navigatorActions)
+    val currentBackStack by backStack.current.collectAsState()
+    val currentRoute = currentBackStack.last()
 
-    val currentRoute = backStack.current.collectAsState().value.last()
+    BackHandler(
+        enabled = currentBackStack.size > 1,
+        onBack = { navigatorActions.pop() }
+    )
 
     WithSaveableState(currentRoute, backStack) {
 
