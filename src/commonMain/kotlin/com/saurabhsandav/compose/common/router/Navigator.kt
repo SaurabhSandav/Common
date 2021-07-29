@@ -8,7 +8,17 @@ import kotlinx.serialization.KSerializer
 
 @Composable
 public fun <ROUTE : Any> Navigator(
-    startRoute: ROUTE,
+    initialRoute: ROUTE,
+    routeSerializer: KSerializer<ROUTE>,
+    content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouterResultHandler) -> Unit,
+) {
+
+    Navigator(listOf(initialRoute), routeSerializer, content)
+}
+
+@Composable
+public fun <ROUTE : Any> Navigator(
+    initialRoutes: List<ROUTE>,
     routeSerializer: KSerializer<ROUTE>,
     content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouterResultHandler) -> Unit,
 ) {
@@ -16,7 +26,7 @@ public fun <ROUTE : Any> Navigator(
     val saveableStateRegistry = requireSaveableStateRegistry()
     // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
     val key: String = currentCompositeKeyHash.toString(36)
-    val backStack = remember { BackStack(startRoute, routeSerializer, key, saveableStateRegistry) }
+    val backStack = remember { BackStack(initialRoutes, routeSerializer, key, saveableStateRegistry) }
     val navigatorActions = remember { NavigatorActions(backStack) }
     val routerResultHandler = remember { RouterResultHandler() }
 

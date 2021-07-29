@@ -12,7 +12,7 @@ internal fun createRegistry(
 internal fun createBackStack(
     initialRoute: String,
 ) = BackStack(
-    startRoute = initialRoute,
+    initialRoutes = listOf(initialRoute),
     routeSerializer = String.serializer(),
     key = "Test",
     saveableStateRegistry = createRegistry()
