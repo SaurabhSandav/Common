@@ -25,8 +25,8 @@ class BackStackTest {
         val backStack = createBackStack("Initial Route")
 
         val listener = object : BackStackListener<String> {
-            override fun onAdded(route: String, routeKey: String) {}
-            override fun onRemoved(route: String, routeKey: String) {}
+            override fun onAdded(route: String, key: Int) {}
+            override fun onRemoved(route: String, key: Int) {}
         }
 
         backStack.addListener(listener)
@@ -47,11 +47,11 @@ class BackStackTest {
 
         val listener = object : BackStackListener<String> {
 
-            override fun onAdded(route: String, routeKey: String) {
+            override fun onAdded(route: String, key: Int) {
                 added = route
             }
 
-            override fun onRemoved(route: String, routeKey: String) {
+            override fun onRemoved(route: String, key: Int) {
                 removed = route
             }
         }

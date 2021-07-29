@@ -10,11 +10,12 @@ import kotlinx.serialization.KSerializer
 public fun <ROUTE : Any> Navigator(
     startRoute: ROUTE,
     routeSerializer: KSerializer<ROUTE>,
-    key: String = "RootRouter",
     content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouterResultHandler) -> Unit,
 ) {
 
     val saveableStateRegistry = requireSaveableStateRegistry()
+    // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
+    val key: String = currentCompositeKeyHash.toString(36)
     val backStack = remember { BackStack(startRoute, routeSerializer, key, saveableStateRegistry) }
     val navigatorActions = remember { NavigatorActions(backStack) }
     val routerResultHandler = remember { RouterResultHandler() }
@@ -27,7 +28,7 @@ public fun <ROUTE : Any> Navigator(
         onBack = { navigatorActions.pop() }
     )
 
-    WithSaveableState(currentRoute, backStack) {
+    WithSaveableState(currentRoute, backStack, key) {
 
         Crossfade(currentRoute) {
             navigatorActions.content(it, routerResultHandler)
@@ -39,6 +40,7 @@ public fun <ROUTE : Any> Navigator(
 private fun <ROUTE : Any> WithSaveableState(
     currentRoute: ROUTE,
     backStack: BackStack<ROUTE>,
+    navigatorKey: String,
     content: @Composable () -> Unit,
 ) {
 
@@ -46,10 +48,10 @@ private fun <ROUTE : Any> WithSaveableState(
 
     val onPopListener = remember {
         object : BackStackListener<ROUTE> {
-            override fun onAdded(route: ROUTE, routeKey: String) {}
+            override fun onAdded(route: ROUTE, key: Int) {}
 
-            override fun onRemoved(route: ROUTE, routeKey: String) {
-                saveableStateHolder.removeState(routeKey)
+            override fun onRemoved(route: ROUTE, key: Int) {
+                saveableStateHolder.removeState(generateKey(navigatorKey, key))
             }
         }
     }
@@ -59,5 +61,9 @@ private fun <ROUTE : Any> WithSaveableState(
         onDispose { backStack.removeListener(onPopListener) }
     }
 
-    saveableStateHolder.SaveableStateProvider(backStack.getEntryKey(currentRoute), content)
+    val key = generateKey(navigatorKey, backStack.getEntryKey(currentRoute))
+
+    saveableStateHolder.SaveableStateProvider(key, content)
 }
+
+private fun generateKey(navigatorKey: String, routeKey: Int): String = "${navigatorKey}_$routeKey"
