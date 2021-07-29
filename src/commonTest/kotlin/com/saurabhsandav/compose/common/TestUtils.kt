@@ -3,6 +3,7 @@ package com.saurabhsandav.compose.common
 import androidx.compose.runtime.saveable.SaveableStateRegistry
 import com.saurabhsandav.compose.common.navigator.BackStack
 import com.saurabhsandav.compose.common.navigator.NavigatorActions
+import com.saurabhsandav.compose.common.navigator.ResultHandler
 import kotlinx.serialization.builtins.serializer
 
 internal fun createRegistry(
@@ -18,4 +19,4 @@ internal fun createBackStack(
     saveableStateRegistry = createRegistry()
 )
 
-internal fun createNavigatorActions(backStack: BackStack<String>) = NavigatorActions(backStack)
+internal fun createNavigatorActions(backStack: BackStack<String>) = NavigatorActions(backStack, ResultHandler())

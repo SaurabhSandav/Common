@@ -51,6 +51,24 @@ class NavigatorActionsTest {
     }
 
     @Test
+    fun testPopWithResult() {
+
+        val initialRoute = "Initial Route"
+
+        val backStack = createBackStack(initialRoute)
+        val resultHandler = ResultHandler()
+        val navigatorActions = NavigatorActions(backStack, resultHandler)
+
+        val testResult = object : RouteResult {}
+
+        navigatorActions.push("New Route")
+        navigatorActions.popWithResult(testResult)
+
+        assertEquals(initialRoute, backStack.current.value.last())
+        assertEquals(testResult, resultHandler.consumeResult())
+    }
+
+    @Test
     fun testReplace() {
 
         val initialRoute = "Initial Route"

@@ -2,6 +2,7 @@ package com.saurabhsandav.compose.common.navigator
 
 public class NavigatorActions<ROUTE : Any> internal constructor(
     private val backStack: BackStack<ROUTE>,
+    private val resultHandler: ResultHandler,
 ) {
 
     public fun push(
@@ -21,6 +22,13 @@ public class NavigatorActions<ROUTE : Any> internal constructor(
                 else -> it
             }
         }
+    }
+
+    public fun popWithResult(result: RouteResult) {
+
+        resultHandler.setResult(result)
+
+        pop()
     }
 }
 

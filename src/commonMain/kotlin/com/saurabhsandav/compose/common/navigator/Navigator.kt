@@ -10,7 +10,7 @@ import kotlinx.serialization.KSerializer
 public fun <ROUTE : Any> Navigator(
     initialRoute: ROUTE,
     routeSerializer: KSerializer<ROUTE>,
-    content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouterResultHandler) -> Unit,
+    content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouteResult?) -> Unit,
 ) {
 
     Navigator(listOf(initialRoute), routeSerializer, content)
@@ -20,15 +20,15 @@ public fun <ROUTE : Any> Navigator(
 public fun <ROUTE : Any> Navigator(
     initialRoutes: List<ROUTE>,
     routeSerializer: KSerializer<ROUTE>,
-    content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouterResultHandler) -> Unit,
+    content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouteResult?) -> Unit,
 ) {
 
     val saveableStateRegistry = requireSaveableStateRegistry()
     // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
     val key: String = currentCompositeKeyHash.toString(36)
     val backStack = remember { BackStack(initialRoutes, routeSerializer, key, saveableStateRegistry) }
-    val navigatorActions = remember { NavigatorActions(backStack) }
-    val routerResultHandler = remember { RouterResultHandler() }
+    val resultHandler = remember { ResultHandler() }
+    val navigatorActions = remember { NavigatorActions(backStack, resultHandler) }
 
     val currentBackStack by backStack.current.collectAsState()
     val currentRoute = currentBackStack.last()
@@ -41,7 +41,7 @@ public fun <ROUTE : Any> Navigator(
     WithSaveableState(currentRoute, backStack, key) {
 
         Crossfade(currentRoute) {
-            navigatorActions.content(it, routerResultHandler)
+            navigatorActions.content(it, resultHandler.consumeResult())
         }
     }
 }
