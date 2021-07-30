@@ -21,7 +21,7 @@ public abstract class Presenter(
 
     private val saveableProviderEntries = mutableListOf<SaveableStateRegistry.Entry>()
 
-    protected val viewModelScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    protected val presenterScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     protected inline fun <T, reified V : Any> saved(
         key: String? = null,
@@ -89,7 +89,7 @@ public abstract class Presenter(
 
     private fun onDispose() {
 
-        viewModelScope.cancel()
+        presenterScope.cancel()
 
         saveableProviderEntries.forEach { it.unregister() }
         saveableProviderEntries.clear()
