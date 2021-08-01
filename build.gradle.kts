@@ -1,14 +1,14 @@
 plugins {
     id("com.github.ben-manes.versions") version "0.39.0"
     id("com.android.library") version "4.2.0"
-    kotlin("multiplatform") version "1.5.10"
-    kotlin("plugin.serialization") version "1.5.10"
-    id("org.jetbrains.compose") version "0.5.0-build228"
+    kotlin("multiplatform") version "1.5.21"
+    kotlin("plugin.serialization") version "1.5.21"
+    id("org.jetbrains.compose") version "1.0.0-alpha2"
     id("maven-publish")
 }
 
 group = "com.saurabhsandav.compose"
-version = "0.0.3"
+version = "0.0.4"
 
 repositories {
     google()

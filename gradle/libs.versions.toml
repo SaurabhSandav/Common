@@ -1,6 +1,6 @@
 [versions]
-coroutines = "1.5.0"
-serialization = "1.2.1"
+coroutines = "1.5.1"
+serialization = "1.2.2"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -9,8 +9,8 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 napier = "io.github.aakira:napier:1.5.0"
 
-activity-compose = "androidx.activity:activity-compose:1.3.0"
+activity-compose = "androidx.activity:activity-compose:1.3.1"
 
-accompanist-insets = "com.google.accompanist:accompanist-insets:0.15.0"
+accompanist-insets = "com.google.accompanist:accompanist-insets:0.16.0"
 
 bundlizer = "dev.ahmedmourad.bundlizer:bundlizer-core:0.6.0"
