@@ -34,10 +34,15 @@ kotlin {
 
         all {
 
-            listOf(
-                "androidx.compose.ui.ExperimentalComposeUiApi",
-                "kotlinx.coroutines.ExperimentalCoroutinesApi",
-            ).forEach(languageSettings::useExperimentalAnnotation)
+            languageSettings {
+
+                progressiveMode = true
+
+                listOf(
+                    "androidx.compose.ui.ExperimentalComposeUiApi",
+                    "kotlinx.coroutines.ExperimentalCoroutinesApi",
+                ).forEach { useExperimentalAnnotation(it) }
+            }
         }
 
         named("commonMain") {
