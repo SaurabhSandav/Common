@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.saurabhsandav.compose"
-version = "0.0.4"
+version = "0.0.5"
 
 repositories {
     google()
@@ -41,7 +41,7 @@ kotlin {
                 listOf(
                     "androidx.compose.ui.ExperimentalComposeUiApi",
                     "kotlinx.coroutines.ExperimentalCoroutinesApi",
-                ).forEach { useExperimentalAnnotation(it) }
+                ).forEach { optIn(it) }
             }
         }
 
