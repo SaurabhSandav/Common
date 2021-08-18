@@ -1,9 +1,9 @@
 plugins {
-    id("com.github.ben-manes.versions") version "0.39.0"
-    id("com.android.library") version "4.2.0"
-    kotlin("multiplatform") version "1.5.21"
-    kotlin("plugin.serialization") version "1.5.21"
-    id("org.jetbrains.compose") version "1.0.0-alpha2"
+    alias(libs.plugins.gradle.versions.checker)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.jetbrains.compose)
     id("maven-publish")
 }
 
