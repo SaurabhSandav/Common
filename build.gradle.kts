@@ -10,12 +10,6 @@ plugins {
 group = "com.saurabhsandav.compose"
 version = "0.0.6"
 
-repositories {
-    google()
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-}
-
 kotlin {
 
     explicitApi()
