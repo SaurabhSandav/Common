@@ -1,3 +1,6 @@
+// FIXME IDE warns "`libs` can't be called in this context by implicit receiver"
+// FIXME https://youtrack.jetbrains.com/issue/KTIJ-19369
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.gradle.versions.checker)
     alias(libs.plugins.android.library)
@@ -25,6 +28,9 @@ kotlin {
     }
 
     sourceSets {
+
+        // FIXME IDE/Gradle show warnings related to this sourceset https://youtrack.jetbrains.com/issue/KT-48436
+        removeAll { it.name == "androidAndroidTestRelease" }
 
         all {
 
