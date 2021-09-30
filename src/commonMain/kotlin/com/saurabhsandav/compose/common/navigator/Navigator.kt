@@ -23,6 +23,11 @@ public fun <ROUTE : Any> Navigator(
     content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouteResult?) -> Unit,
 ) {
 
+    LaunchedEffect(initialRoutes) {
+        if (initialRoutes.isEmpty())
+            error("Navigator needs an initial route")
+    }
+
     val saveableStateRegistry = requireSaveableStateRegistry()
     // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
     val key: String = currentCompositeKeyHash.toString(36)
