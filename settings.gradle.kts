@@ -25,9 +25,23 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "compose-common"
+rootProject.name = "common"
 
 listOf(
     "TYPESAFE_PROJECT_ACCESSORS",
     "VERSION_CATALOGS",
 ).forEach { enableFeaturePreview(it) }
+
+include(
+    ":core",
+    ":compose",
+)
+
+setBuildFileName(rootProject)
+
+fun setBuildFileName(project: ProjectDescriptor) {
+    project.children.onEach { childProject ->
+        childProject.buildFileName = "${childProject.name}.gradle.kts"
+        setBuildFileName(childProject)
+    }
+}
