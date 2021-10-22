@@ -1,7 +1,7 @@
-package com.saurabhsandav.common.compose.navigator
+package com.saurabhsandav.common.core.navigation
 
 public class NavigatorActions<ROUTE : Any> internal constructor(
-    private val backStack: BackStack<ROUTE>,
+    private val backStackTransformer: BackStackTransformer<ROUTE>,
     private val resultHandler: ResultHandler,
 ) {
 
@@ -9,14 +9,14 @@ public class NavigatorActions<ROUTE : Any> internal constructor(
         newRoute: ROUTE,
         popWhile: (ROUTE) -> Boolean = { false },
     ) {
-        backStack.transform {
+        backStackTransformer.transform {
             it.dropLastWhile(popWhile) + newRoute
         }
     }
 
     public fun pop() {
 
-        backStack.transform {
+        backStackTransformer.transform {
             when {
                 it.size > 1 -> it.dropLast(1)
                 else -> it

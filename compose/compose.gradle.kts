@@ -48,6 +48,8 @@ kotlin {
 
             dependencies {
 
+                api(projects.core)
+
                 // Compose
                 implementation(compose.runtime)
                 implementation(compose.foundation)
