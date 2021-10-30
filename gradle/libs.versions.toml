@@ -11,7 +11,7 @@ android-library = "com.android.library:4.2.0"
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
-jetbrains-compose = "org.jetbrains.compose:1.0.0-alpha4-build362"
+jetbrains-compose = "org.jetbrains.compose:1.0.0-beta5"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -20,8 +20,8 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 napier = "io.github.aakira:napier:1.5.0"
 
-activity-compose = "androidx.activity:activity-compose:1.4.0-alpha02"
+activity-compose = "androidx.activity:activity-compose:1.4.0"
 
-accompanist-insets = "com.google.accompanist:accompanist-insets:0.18.0"
+accompanist-insets = "com.google.accompanist:accompanist-insets:0.21.0-beta"
 
 bundlizer = "dev.ahmedmourad.bundlizer:bundlizer-core:0.6.0"
