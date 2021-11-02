@@ -82,8 +82,8 @@ private class NavigatorSaver<ROUTE : Any>(
 
     val backStackSaver = PlatformSaver(ListSerializer(routeSerializer))
 
-    override fun SaverScope.save(value: Navigator<ROUTE>) {
-        with(backStackSaver) {
+    override fun SaverScope.save(value: Navigator<ROUTE>): Any? {
+        return with(backStackSaver) {
             SaverScope { true }.save(value.backStack.value)
         }
     }
