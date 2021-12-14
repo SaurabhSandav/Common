@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.saurabhsandav.common"
-version = "0.0.1"
+version = "0.0.2"
 
 kotlin {
 
@@ -36,11 +36,6 @@ kotlin {
             languageSettings {
 
                 progressiveMode = true
-
-                listOf(
-                    "androidx.compose.ui.ExperimentalComposeUiApi",
-                    "kotlinx.coroutines.ExperimentalCoroutinesApi",
-                ).forEach { optIn(it) }
             }
         }
 
@@ -60,9 +55,6 @@ kotlin {
 
                 // KotlinX Serialization
                 implementation(libs.kotlinx.serialization.core)
-
-                // Napier
-                implementation(libs.napier)
             }
         }
 
