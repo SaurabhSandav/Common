@@ -77,11 +77,11 @@ kotlin {
 
 android {
 
-    compileSdkVersion(31)
+    compileSdk = 31
 
     defaultConfig {
-        minSdkVersion(28)
-        targetSdkVersion(31)
+        minSdk = 28
+        targetSdk = 31
     }
 
     compileOptions {
