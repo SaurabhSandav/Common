@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.saurabhsandav.common"
-version = "0.0.2"
+version = "0.0.3"
 
 kotlin {
 
@@ -67,7 +67,7 @@ kotlin {
                 implementation(libs.activity.compose)
 
                 // Accompanist
-                api(libsOld.accompanist.insets)
+                api(libs.accompanist.insets)
 
                 // Bundlizer
                 implementation(libs.bundlizer)

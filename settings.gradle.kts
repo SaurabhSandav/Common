@@ -30,10 +30,8 @@ dependencyResolutionManagement {
 
     versionCatalogs {
 
-        defaultLibrariesExtensionName.set("libsOld")
-
         create("libs") {
-            from("com.saurabhsandav:common-versions:0.0.2")
+            from("com.saurabhsandav:common-versions:0.0.3")
         }
     }
 }
