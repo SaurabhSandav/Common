@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.saurabhsandav.common.compose.state
 
 @Composable
-actual fun <T> DropdownRadio(
+public actual fun <T> DropdownRadio(
     items: List<T>,
     itemTitle: (T) -> String,
     selectedItem: T,

@@ -33,7 +33,7 @@ dependencyResolutionManagement {
         defaultLibrariesExtensionName.set("libsOld")
 
         create("libs") {
-            from("com.saurabhsandav:common-versions:0.0.1")
+            from("com.saurabhsandav:common-versions:0.0.2")
         }
     }
 }

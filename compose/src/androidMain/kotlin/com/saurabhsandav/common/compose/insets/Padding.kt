@@ -7,13 +7,13 @@ import com.google.accompanist.insets.navigationBarsWithImePadding as accompanist
 import com.google.accompanist.insets.statusBarsPadding as accompanistStatusBarsPadding
 import com.google.accompanist.insets.systemBarsPadding as accompanistSystemBarsPadding
 
-actual fun Modifier.systemBarsPadding(
+public actual fun Modifier.systemBarsPadding(
     enabled: Boolean,
 ): Modifier = accompanistSystemBarsPadding(enabled)
 
-actual fun Modifier.statusBarsPadding(): Modifier = accompanistStatusBarsPadding()
+public actual fun Modifier.statusBarsPadding(): Modifier = accompanistStatusBarsPadding()
 
-actual fun Modifier.navigationBarsPadding(
+public actual fun Modifier.navigationBarsPadding(
     bottom: Boolean,
     start: Boolean,
     end: Boolean,
@@ -23,6 +23,6 @@ actual fun Modifier.navigationBarsPadding(
     end = end
 )
 
-actual fun Modifier.imePadding(): Modifier = accompanistImePadding()
+public actual fun Modifier.imePadding(): Modifier = accompanistImePadding()
 
-actual fun Modifier.navigationBarsWithImePadding(): Modifier = accompanistNavigationBarsWithImePadding()
+public actual fun Modifier.navigationBarsWithImePadding(): Modifier = accompanistNavigationBarsWithImePadding()

@@ -6,7 +6,7 @@ import dev.ahmedmourad.bundlizer.bundle
 import dev.ahmedmourad.bundlizer.unbundle
 import kotlinx.serialization.KSerializer
 
-actual fun <T : Any> PlatformSaver(
+public actual fun <T : Any> PlatformSaver(
     serializer: KSerializer<T>,
 ): Saver<T, Any> = Saver(
     save = { it.bundle(serializer) },

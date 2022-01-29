@@ -3,7 +3,7 @@ package com.saurabhsandav.common.compose.ui
 import androidx.compose.runtime.Composable
 
 @Composable
-actual fun Dialog(
+public actual fun Dialog(
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit,
 ) {

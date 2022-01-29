@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import com.saurabhsandav.common.compose.state
 
 @Composable
-actual fun <T> Spinner(
+public actual fun <T> Spinner(
     items: List<T>,
     itemTitle: (T) -> String,
     selectedItem: T,
