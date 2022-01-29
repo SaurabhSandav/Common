@@ -8,12 +8,33 @@ pluginManagement {
     }
 }
 
+listOf(
+    "TYPESAFE_PROJECT_ACCESSORS",
+    "VERSION_CATALOGS",
+).forEach { enableFeaturePreview(it) }
+
 dependencyResolutionManagement {
 
     repositories {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven {
+            url = uri("https://maven.pkg.github.com/saurabhsandav/CommonVersions")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
+    versionCatalogs {
+
+        defaultLibrariesExtensionName.set("libsOld")
+
+        create("libs") {
+            from("com.saurabhsandav:common-versions:0.0.1")
+        }
     }
 }
 

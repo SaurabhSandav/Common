@@ -66,7 +66,7 @@ kotlin {
                 implementation(libs.activity.compose)
 
                 // Accompanist
-                api(libs.accompanist.insets)
+                api(libsOld.accompanist.insets)
 
                 // Bundlizer
                 implementation(libs.bundlizer)
