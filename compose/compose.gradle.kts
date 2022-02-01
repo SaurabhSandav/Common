@@ -23,7 +23,7 @@ kotlin {
     }
 
     android {
-        publishLibraryVariants("release", "debug")
+        publishLibraryVariants("release")
     }
 
     sourceSets {
