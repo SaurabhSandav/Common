@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.saurabhsandav.common"
-version = "0.0.3"
+version = "0.0.4"
 
 kotlin {
 
@@ -109,4 +109,18 @@ android {
     }
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+}
+
+publishing {
+
+    repositories {
+        maven {
+            name = "Common"
+            url = uri("https://maven.pkg.github.com/saurabhsandav/Common")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
