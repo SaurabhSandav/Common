@@ -22,7 +22,7 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/saurabhsandav/CommonVersions")
             credentials {
-                username = System.getenv("GITHUB_USERNAME")
+                username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
