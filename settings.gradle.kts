@@ -13,6 +13,12 @@ listOf(
     "VERSION_CATALOGS",
 ).forEach { enableFeaturePreview(it) }
 
+@Suppress("PropertyName")
+val GITHUB_ACTOR: String? by settings
+
+@Suppress("PropertyName")
+val GITHUB_TOKEN: String? by settings
+
 dependencyResolutionManagement {
 
     repositories {
@@ -22,8 +28,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/saurabhsandav/CommonVersions")
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+                username = System.getenv("GITHUB_ACTOR") ?: GITHUB_ACTOR
+                password = System.getenv("GITHUB_TOKEN") ?: GITHUB_TOKEN
             }
         }
     }
