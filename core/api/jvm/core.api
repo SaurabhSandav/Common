@@ -1,0 +1,32 @@
+public abstract interface class com/saurabhsandav/common/core/navigation/BackStackListener {
+	public abstract fun onAdded (ILjava/lang/Object;)V
+	public abstract fun onRemoved (ILjava/lang/Object;)V
+}
+
+public final class com/saurabhsandav/common/core/navigation/Navigator {
+	public fun <init> (Ljava/util/List;)V
+	public final fun addBackStackListener (Lcom/saurabhsandav/common/core/navigation/BackStackListener;)V
+	public final fun getActions ()Lcom/saurabhsandav/common/core/navigation/NavigatorActions;
+	public final fun getBackStack ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getResultHandler ()Lcom/saurabhsandav/common/core/navigation/ResultHandler;
+	public final fun removeBackStackListener (Lcom/saurabhsandav/common/core/navigation/BackStackListener;)V
+}
+
+public final class com/saurabhsandav/common/core/navigation/NavigatorActions {
+	public final fun pop ()V
+	public final fun popWithResult (Lcom/saurabhsandav/common/core/navigation/RouteResult;)V
+	public final fun push (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun push$default (Lcom/saurabhsandav/common/core/navigation/NavigatorActions;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class com/saurabhsandav/common/core/navigation/NavigatorActionsKt {
+	public static final fun replace (Lcom/saurabhsandav/common/core/navigation/NavigatorActions;Ljava/lang/Object;)V
+}
+
+public final class com/saurabhsandav/common/core/navigation/ResultHandler {
+	public final fun consumeResult ()Lcom/saurabhsandav/common/core/navigation/RouteResult;
+}
+
+public abstract interface class com/saurabhsandav/common/core/navigation/RouteResult {
+}
+
