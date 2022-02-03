@@ -19,16 +19,11 @@ jobs:
           distribution: 'adopt'
           java-version: 11
 
-      - name: Check API
+      - name: Build and Check API
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: apiCheck
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build project
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build
+          arguments: |
+          build
+          apiCheck
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
