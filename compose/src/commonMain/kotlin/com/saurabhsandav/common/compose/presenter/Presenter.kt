@@ -2,9 +2,9 @@ package com.saurabhsandav.common.compose.presenter
 
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.saveable.SaveableStateRegistry
-import com.saurabhsandav.common.compose.saveable.PlatformSaver
 import com.saurabhsandav.common.compose.saveable.consumeRestored
 import com.saurabhsandav.common.compose.saveable.registerProvider
+import com.saurabhsandav.common.compose.saveable.serializableSaver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -36,7 +36,7 @@ public abstract class Presenter(
 
         val finalKey = key ?: createSaveableKey()
 
-        val saver = PlatformSaver(serializer)
+        val saver = serializableSaver(serializer)
 
         return@with object : ReadWriteProperty<T, V> {
 
@@ -70,7 +70,7 @@ public abstract class Presenter(
 
         val finalKey = key ?: createSaveableKey()
 
-        val saver = PlatformSaver(serializer)
+        val saver = serializableSaver(serializer)
 
         val value = saveableStateRegistry.consumeRestored(finalKey, saver, initialValue)
 

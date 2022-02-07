@@ -6,7 +6,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import com.saurabhsandav.common.compose.saveable.PlatformSaver
+import com.saurabhsandav.common.compose.saveable.serializableSaver
 import com.saurabhsandav.common.core.navigation.BackStackListener
 import com.saurabhsandav.common.core.navigation.Navigator
 import com.saurabhsandav.common.core.navigation.NavigatorActions
@@ -80,7 +80,7 @@ private class NavigatorSaver<ROUTE : Any>(
     routeSerializer: KSerializer<ROUTE>
 ) : Saver<Navigator<ROUTE>, Any> {
 
-    val backStackSaver = PlatformSaver(ListSerializer(routeSerializer))
+    val backStackSaver = serializableSaver(ListSerializer(routeSerializer))
 
     override fun SaverScope.save(value: Navigator<ROUTE>): Any? {
         return with(backStackSaver) {
