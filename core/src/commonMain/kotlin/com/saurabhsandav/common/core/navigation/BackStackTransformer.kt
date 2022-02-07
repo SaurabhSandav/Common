@@ -16,8 +16,8 @@ internal class BackStackTransformer<ROUTE : Any>(
 
         _backStack.value = transformedBackStack
 
-        val removed = currentBackStack - transformedBackStack
-        val added = transformedBackStack - currentBackStack
+        val removed = currentBackStack - transformedBackStack.toSet()
+        val added = transformedBackStack - currentBackStack.toSet()
 
         listeners.forEach { listener ->
             removed.forEach { listener.onRemoved(currentBackStack.indexOf(it), it) }
