@@ -46,7 +46,6 @@ rootProject.name = "common"
 
 listOf(
     "TYPESAFE_PROJECT_ACCESSORS",
-    "VERSION_CATALOGS",
 ).forEach { enableFeaturePreview(it) }
 
 include(
