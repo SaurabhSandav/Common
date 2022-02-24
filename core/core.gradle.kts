@@ -47,6 +47,9 @@ kotlin {
 
                 // KotlinX Serialization
                 implementation(libs.kotlinx.serialization.core)
+
+                // Kermit
+                implementation(libs.kermit)
             }
         }
 
