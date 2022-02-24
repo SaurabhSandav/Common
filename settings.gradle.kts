@@ -51,6 +51,9 @@ listOf(
 include(
     ":core",
     ":compose",
+    ":sample:base",
+    ":sample:platform:android",
+    ":sample:platform:desktop",
 )
 
 setBuildFileName(rootProject)
