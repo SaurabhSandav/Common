@@ -9,7 +9,7 @@ public fun <ROUTE : Any> Navigator<ROUTE>.push(
 
     Snapshot.withMutableSnapshot {
 
-        while (popWhile(backStack.last())) {
+        while (popWhile(backStack.last().key)) {
             pop()
         }
 

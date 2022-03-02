@@ -51,6 +51,9 @@ kotlin {
                 // Compose Runtime
                 implementation(libs.jetbrains.compose.runtime)
 
+                // UUID
+                implementation(libs.uuid)
+
                 // Kermit
                 implementation(libs.kermit)
             }
