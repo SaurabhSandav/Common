@@ -55,7 +55,10 @@ private fun AppNavigator() {
                     Text("Push")
                 }
 
-                Button(onClick = { pop() }) {
+                Button(
+                    enabled = canPop,
+                    onClick = { pop() },
+                ) {
                     Text("Pop")
                 }
             }

@@ -1,43 +1,32 @@
 package com.saurabhsandav.common.core.navigation
 
-public class NavigatorActions<ROUTE : Any> internal constructor(
-    private val backStackTransformer: BackStackTransformer<ROUTE>,
-    private val resultHandler: ResultHandler,
+import androidx.compose.runtime.snapshots.Snapshot
+
+public fun <ROUTE : Any> Navigator<ROUTE>.push(
+    route: ROUTE,
+    popWhile: (ROUTE) -> Boolean = { false },
 ) {
 
-    public fun push(
-        newRoute: ROUTE,
-        popWhile: (ROUTE) -> Boolean = { false },
-    ) {
-        backStackTransformer.transform {
-            it.dropLastWhile(popWhile) + newRoute
+    Snapshot.withMutableSnapshot {
+
+        while (popWhile(backStack.last())) {
+            pop()
         }
-    }
 
-    public fun pop() {
-
-        backStackTransformer.transform {
-            when {
-                it.size > 1 -> it.dropLast(1)
-                else -> it
-            }
-        }
-    }
-
-    public fun popWithResult(result: RouteResult) {
-
-        resultHandler.setResult(result)
-
-        pop()
+        push(route)
     }
 }
 
-public fun <ROUTE : Any> NavigatorActions<ROUTE>.replace(newRoute: ROUTE) {
+public fun <ROUTE : Any> Navigator<ROUTE>.popWithResult(result: RouteResult) {
 
-    var poppedLast = false
+    resultHandler.setResult(result)
 
-    push(newRoute) {
-        if (!poppedLast) poppedLast = true
-        true
+    pop()
+}
+
+public fun <ROUTE : Any> Navigator<ROUTE>.replace(newRoute: ROUTE) {
+    Snapshot.withMutableSnapshot {
+        pop()
+        push(newRoute)
     }
 }

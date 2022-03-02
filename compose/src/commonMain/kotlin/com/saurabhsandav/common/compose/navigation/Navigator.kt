@@ -12,7 +12,6 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import com.saurabhsandav.common.compose.saveable.serializableSaver
 import com.saurabhsandav.common.core.navigation.BackStackListener
 import com.saurabhsandav.common.core.navigation.Navigator
-import com.saurabhsandav.common.core.navigation.NavigatorActions
 import com.saurabhsandav.common.core.navigation.RouteResult
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
@@ -21,7 +20,7 @@ import kotlinx.serialization.builtins.ListSerializer
 public fun <ROUTE : Any> Navigator(
     vararg initialRoutes: ROUTE,
     routeSerializer: KSerializer<ROUTE>,
-    content: @Composable NavigatorActions<ROUTE>.(ROUTE, RouteResult?) -> Unit,
+    content: @Composable Navigator<ROUTE>.(ROUTE, RouteResult?) -> Unit,
 ) {
 
     val saver = remember { NavigatorSaver(routeSerializer) }
@@ -31,14 +30,14 @@ public fun <ROUTE : Any> Navigator(
     val currentRoute = backStack.last()
 
     BackHandler(
-        enabled = backStack.size > 1,
-        onBack = { navigator.actions.pop() }
+        enabled = navigator.canPop,
+        onBack = { navigator.pop() }
     )
 
     WithSaveableState(navigator) {
 
         Crossfade(currentRoute) {
-            navigator.actions.content(it, navigator.resultHandler.consumeResult())
+            navigator.content(it, navigator.resultHandler.consumeResult())
         }
     }
 }

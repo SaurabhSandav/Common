@@ -1,5 +1,7 @@
 package com.saurabhsandav.common.core.navigation
 
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.toMutableStateList
 
 public class Navigator<ROUTE : Any>(initialRoutes: List<ROUTE>) {
@@ -11,12 +13,39 @@ public class Navigator<ROUTE : Any>(initialRoutes: List<ROUTE>) {
 
     private val listeners = mutableListOf<BackStackListener<ROUTE>>()
     private val _backStack = initialRoutes.toMutableStateList()
-    private val backStackTransformer = BackStackTransformer(_backStack, listeners)
 
     public val backStack: List<ROUTE>
         get() = _backStack
     public val resultHandler: ResultHandler = ResultHandler()
-    public val actions: NavigatorActions<ROUTE> = NavigatorActions(backStackTransformer, resultHandler)
+
+    public val canPop: Boolean by derivedStateOf { backStack.size >= 2 }
+
+    public fun push(route: ROUTE) {
+
+        // Update Backstack
+        _backStack.add(route)
+
+        val addedIndex = backStack.lastIndex
+
+        // Notify listeners
+        listeners.forEach { listener ->
+            listener.onAdded(addedIndex, route)
+        }
+    }
+
+    public fun pop() {
+
+        if (!canPop) return
+
+        // Update Backstack
+        val removedIndex = backStack.lastIndex
+        val removedRoute = _backStack.removeLast()
+
+        // Notify listeners
+        listeners.forEach { listener ->
+            listener.onRemoved(removedIndex, removedRoute)
+        }
+    }
 
     public fun addBackStackListener(listener: BackStackListener<ROUTE>) {
         listeners.add(listener)
