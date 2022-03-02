@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.saurabhsandav.base.screen.common.theme.AppTheme
 import com.saurabhsandav.common.compose.navigation.Navigator
-import kotlinx.serialization.serializer
+import com.saurabhsandav.common.compose.saveable.serializableSaver
 
 @Composable
 internal fun App() {
@@ -34,7 +34,7 @@ private fun AppNavigator() {
         generateSequence { "Route#${counter++}" }.iterator()
     }
 
-    Navigator(routeGenerator.next(), routeSerializer = serializer()) { currentRoute, _ ->
+    Navigator(routeGenerator.next(), routeSaver = serializableSaver()) { currentRoute, _ ->
 
         Column(
             modifier = Modifier.fillMaxSize(),

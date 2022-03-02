@@ -5,25 +5,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.SaverScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import com.saurabhsandav.common.compose.saveable.serializableSaver
+import androidx.compose.runtime.saveable.*
 import com.saurabhsandav.common.core.navigation.BackStackListener
 import com.saurabhsandav.common.core.navigation.Navigator
 import com.saurabhsandav.common.core.navigation.RouteResult
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
 
 @Composable
 public fun <ROUTE : Any> Navigator(
     vararg initialRoutes: ROUTE,
-    routeSerializer: KSerializer<ROUTE>,
+    routeSaver: Saver<ROUTE, Any>? = null,
     content: @Composable Navigator<ROUTE>.(ROUTE, RouteResult?) -> Unit,
 ) {
 
-    val saver = remember { NavigatorSaver(routeSerializer) }
+    val saver = remember(routeSaver) {
+        when {
+            routeSaver != null -> NavigatorSaver(routeSaver)
+            else -> autoSaver()
+        }
+    }
     val navigator = rememberSaveable(saver = saver) { Navigator(initialRoutes.toList()) }
 
     val backStack = navigator.backStack
@@ -78,19 +77,26 @@ private fun <ROUTE : Any> WithSaveableState(
     )
 }
 
-private class NavigatorSaver<ROUTE : Any>(
-    routeSerializer: KSerializer<ROUTE>
-) : Saver<Navigator<ROUTE>, Any> {
+@Suppress("FunctionName")
+internal fun <ROUTE : Any> NavigatorSaver(
+    routeSaver: Saver<ROUTE, Any>
+): Saver<Navigator<ROUTE>, Any> {
+    return listSaver(
+        save = { navigator ->
 
-    val backStackSaver = serializableSaver(ListSerializer(routeSerializer))
+            navigator.backStack.map {
+                with(routeSaver) {
+                    SaverScope { true }.save(it) ?: error("Could not save route")
+                }
+            }
+        },
+        restore = { restored ->
 
-    override fun SaverScope.save(value: Navigator<ROUTE>): Any? {
-        return with(backStackSaver) {
-            SaverScope { true }.save(value.backStack)
-        }
-    }
+            val routes = restored.map {
+                routeSaver.restore(it) ?: error("Could not restore saved route")
+            }
 
-    override fun restore(value: Any): Navigator<ROUTE>? {
-        return backStackSaver.restore(value)?.let { routes -> Navigator(routes) }
-    }
+            Navigator(routes)
+        },
+    )
 }
