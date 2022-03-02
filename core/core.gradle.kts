@@ -48,6 +48,9 @@ kotlin {
                 // KotlinX Serialization
                 implementation(libs.kotlinx.serialization.core)
 
+                // Compose Runtime
+                implementation(libs.jetbrains.compose.runtime)
+
                 // Kermit
                 implementation(libs.kermit)
             }

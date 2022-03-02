@@ -1,7 +1,10 @@
 package com.saurabhsandav.common.compose.navigation
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.currentCompositeKeyHash
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,7 +27,7 @@ public fun <ROUTE : Any> Navigator(
     val saver = remember { NavigatorSaver(routeSerializer) }
     val navigator = rememberSaveable(saver = saver) { Navigator(initialRoutes.toList()) }
 
-    val backStack by navigator.backStack.collectAsState()
+    val backStack = navigator.backStack
     val currentRoute = backStack.last()
 
     BackHandler(
@@ -46,7 +49,7 @@ private fun <ROUTE : Any> WithSaveableState(
     content: @Composable () -> Unit,
 ) {
 
-    val backStack by navigator.backStack.collectAsState()
+    val backStack = navigator.backStack
     val currentRoute = backStack.last()
 
     // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
@@ -84,7 +87,7 @@ private class NavigatorSaver<ROUTE : Any>(
 
     override fun SaverScope.save(value: Navigator<ROUTE>): Any? {
         return with(backStackSaver) {
-            SaverScope { true }.save(value.backStack.value)
+            SaverScope { true }.save(value.backStack)
         }
     }
 

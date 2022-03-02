@@ -1,20 +1,21 @@
 package com.saurabhsandav.common.core.navigation
 
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
 internal class BackStackTransformer<ROUTE : Any>(
-    private val _backStack: MutableStateFlow<List<ROUTE>>,
+    private val _backStack: SnapshotStateList<ROUTE>,
     private val listeners: List<BackStackListener<ROUTE>>,
 ) {
 
     internal fun transform(transformation: (List<ROUTE>) -> List<ROUTE>) {
 
-        val currentBackStack = _backStack.value
+        val currentBackStack = _backStack
         val transformedBackStack = transformation(currentBackStack)
 
         if (transformedBackStack.isEmpty()) error("Backstack cannot be empty")
 
-        _backStack.value = transformedBackStack
+        _backStack.clear()
+        _backStack.addAll(transformedBackStack)
 
         val removed = currentBackStack - transformedBackStack.toSet()
         val added = transformedBackStack - currentBackStack.toSet()

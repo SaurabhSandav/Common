@@ -1,8 +1,6 @@
 package com.saurabhsandav.common.core.navigation
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import androidx.compose.runtime.toMutableStateList
 
 public class Navigator<ROUTE : Any>(initialRoutes: List<ROUTE>) {
 
@@ -12,10 +10,11 @@ public class Navigator<ROUTE : Any>(initialRoutes: List<ROUTE>) {
     }
 
     private val listeners = mutableListOf<BackStackListener<ROUTE>>()
-    private val _backStack = MutableStateFlow(initialRoutes)
+    private val _backStack = initialRoutes.toMutableStateList()
     private val backStackTransformer = BackStackTransformer(_backStack, listeners)
 
-    public val backStack: StateFlow<List<ROUTE>> = _backStack.asStateFlow()
+    public val backStack: List<ROUTE>
+        get() = _backStack
     public val resultHandler: ResultHandler = ResultHandler()
     public val actions: NavigatorActions<ROUTE> = NavigatorActions(backStackTransformer, resultHandler)
 
