@@ -1,4 +1,4 @@
-package com.saurabhsandav.common.compose.navigator
+package com.saurabhsandav.common.compose.navigation
 
 import androidx.compose.runtime.Composable
 

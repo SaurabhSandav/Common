@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.saurabhsandav.base.screen.common.theme.AppTheme
-import com.saurabhsandav.common.compose.navigator.Navigator
+import com.saurabhsandav.common.compose.navigation.Navigator
 import kotlinx.serialization.serializer
 
 @Composable
