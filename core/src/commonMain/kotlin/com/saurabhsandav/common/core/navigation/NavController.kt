@@ -5,11 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.toMutableStateList
 import com.benasher44.uuid.uuid4
 
-public class Navigator<ROUTE : Any> private constructor(routeEntries: List<RouteEntry<ROUTE>>) {
+public class NavController<ROUTE : Any> private constructor(
+    public val id: String,
+    routeEntries: List<RouteEntry<ROUTE>>,
+) {
 
     init {
         if (routeEntries.isEmpty())
-            error("Navigator needs an initial route")
+            error("NavController needs an initial route")
     }
 
     private val _backStack = routeEntries.toMutableStateList()
@@ -64,12 +67,18 @@ public class Navigator<ROUTE : Any> private constructor(routeEntries: List<Route
 
     public companion object {
 
-        public operator fun <ROUTE : Any> invoke(initial: List<ROUTE>): Navigator<ROUTE> {
-            return Navigator(initial.map { RouteEntry(it) })
+        public operator fun <ROUTE : Any> invoke(
+            initial: List<ROUTE>,
+            id: String = uuid4().toString(),
+        ): NavController<ROUTE> {
+            return NavController(id, initial.map { RouteEntry(it) })
         }
 
-        public fun <ROUTE : Any> restore(routeEntries: List<RouteEntry<ROUTE>>): Navigator<ROUTE> {
-            return Navigator(routeEntries)
+        public fun <ROUTE : Any> restore(
+            id: String,
+            routeEntries: List<RouteEntry<ROUTE>>,
+        ): NavController<ROUTE> {
+            return NavController(id, routeEntries)
         }
     }
 }

@@ -4,32 +4,40 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.mapSaver
-import com.saurabhsandav.common.core.navigation.Navigator
+import com.saurabhsandav.common.core.navigation.NavController
 import com.saurabhsandav.common.core.navigation.RouteEntry
 
 @Suppress("FunctionName")
-internal fun <ROUTE : Any> NavigatorSaver(
+internal fun <ROUTE : Any> NavControllerSaver(
     routeSaver: Saver<ROUTE, Any>
-): Saver<Navigator<ROUTE>, Any> {
+): Saver<NavController<ROUTE>, Any> {
 
     val routeEntrySaver = RouteEntrySaver(routeSaver)
 
     return listSaver(
-        save = { navigator ->
+        save = { navController ->
 
-            navigator.backStack.map { entry ->
+            val saved = mutableListOf<Any>()
+
+            saved.add(navController.id)
+
+            navController.backStack.mapTo(saved) { entry ->
                 with(routeEntrySaver) {
                     SaverScope { true }.save(entry)!!
                 }
             }
+
+            saved
         },
         restore = { restored ->
 
-            val routes = restored.map {
+            val id = restored.first() as String
+
+            val routes = restored.drop(1).map {
                 routeEntrySaver.restore(it)!!
             }
 
-            Navigator.restore(routes)
+            NavController.restore(id, routes)
         },
     )
 }

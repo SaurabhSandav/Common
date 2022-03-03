@@ -10,7 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.saurabhsandav.base.screen.common.theme.AppTheme
-import com.saurabhsandav.common.compose.navigation.Navigator
+import com.saurabhsandav.common.compose.navigation.NavHost
+import com.saurabhsandav.common.compose.navigation.rememberNavController
 import com.saurabhsandav.common.compose.saveable.serializableSaver
 
 @Composable
@@ -30,11 +31,12 @@ internal fun App() {
 private fun AppNavigator() {
 
     val routeGenerator = remember {
-        var counter = 0
-        generateSequence { "Route#${counter++}" }.iterator()
+        generateSequence(0) { it + 1 }.map { "Route#$it" }.iterator()
     }
 
-    Navigator(routeGenerator.next(), routeSaver = serializableSaver()) { currentRoute, _ ->
+    val controller = rememberNavController(serializableSaver()) { routeGenerator.next() }
+
+    NavHost(controller) { currentRoute, _ ->
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -42,7 +44,7 @@ private fun AppNavigator() {
         ) {
 
             Text(
-                text = "Route Key - $currentRoute",
+                text = "Route Key - ${currentRoute.key}",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
@@ -51,13 +53,13 @@ private fun AppNavigator() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
 
-                Button(onClick = { push(routeGenerator.next()) }) {
+                Button(onClick = { controller.push(routeGenerator.next()) }) {
                     Text("Push")
                 }
 
                 Button(
-                    enabled = canPop,
-                    onClick = { pop() },
+                    onClick = { controller.pop() },
+                    enabled = controller.canPop,
                 ) {
                     Text("Pop")
                 }
