@@ -3,6 +3,7 @@ package com.saurabhsandav.common.core.navigation
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.toMutableStateList
+import com.benasher44.uuid.uuid4
 
 public class Navigator<ROUTE : Any> private constructor(routeEntries: List<RouteEntry<ROUTE>>) {
 
@@ -12,7 +13,7 @@ public class Navigator<ROUTE : Any> private constructor(routeEntries: List<Route
     }
 
     private val _backStack = routeEntries.toMutableStateList()
-    private val listeners = mutableListOf<BackStackListener<ROUTE>>()
+    private val backStackEventListeners = mutableMapOf<String, BackStackEventListener<ROUTE>>()
 
     public val backStack: List<RouteEntry<ROUTE>>
         get() = _backStack
@@ -22,14 +23,14 @@ public class Navigator<ROUTE : Any> private constructor(routeEntries: List<Route
 
     public fun push(route: ROUTE) {
 
-        // Update Backstack
-        _backStack.add(RouteEntry(route))
+        val entry = RouteEntry(route)
 
-        val addedIndex = backStack.lastIndex
+        // Update Backstack
+        _backStack.add(entry)
 
         // Notify listeners
-        listeners.forEach { listener ->
-            listener.onAdded(addedIndex, route)
+        backStackEventListeners.values.forEach { listener ->
+            listener.onChanged(BackStackEvent.RouteAdded(entry))
         }
     }
 
@@ -38,21 +39,27 @@ public class Navigator<ROUTE : Any> private constructor(routeEntries: List<Route
         if (!canPop) return
 
         // Update Backstack
-        val removedIndex = backStack.lastIndex
-        val removedRoute = _backStack.removeLast().key
+        val poppedRouteEntry = _backStack.removeLast()
 
         // Notify listeners
-        listeners.forEach { listener ->
-            listener.onRemoved(removedIndex, removedRoute)
+        backStackEventListeners.values.forEach { listener ->
+            listener.onChanged(BackStackEvent.RouteRemoved(poppedRouteEntry))
         }
     }
 
-    public fun addBackStackListener(listener: BackStackListener<ROUTE>) {
-        listeners.add(listener)
+    public fun addBackStackEventListener(
+        key: String = uuid4().toString(),
+        listener: BackStackEventListener<ROUTE>,
+    ) {
+        backStackEventListeners[key] = listener
     }
 
-    public fun removeBackStackListener(listener: BackStackListener<ROUTE>) {
-        listeners.remove(listener)
+    public fun removeBackStackEventListener(listener: BackStackEventListener<ROUTE>) {
+        backStackEventListeners.values.remove(listener)
+    }
+
+    public fun removeBackStackEventListener(key: String) {
+        backStackEventListeners.remove(key)
     }
 
     public companion object {

@@ -3,13 +3,13 @@ package com.saurabhsandav.common.compose.navigation
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.autoSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import com.saurabhsandav.common.core.navigation.BackStackListener
+import com.saurabhsandav.common.core.navigation.BackStackEvent
+import com.saurabhsandav.common.core.navigation.BackStackEventListener
 import com.saurabhsandav.common.core.navigation.Navigator
 import com.saurabhsandav.common.core.navigation.RouteResult
 
@@ -28,15 +28,14 @@ public fun <ROUTE : Any> Navigator(
     }
     val navigator = rememberSaveable(saver = saver) { Navigator(initialRoutes.toList()) }
 
-    val backStack = navigator.backStack
-    val currentRouteEntry = backStack.last()
-
     BackHandler(
         enabled = navigator.canPop,
         onBack = { navigator.pop() }
     )
 
-    WithSaveableState(navigator) {
+    val currentRouteEntry = navigator.backStack.last()
+
+    WithSaveableState(currentRouteEntry.id, navigator) {
 
         Crossfade(currentRouteEntry) {
             navigator.content(it.key, navigator.resultHandler.consumeResult())
@@ -46,36 +45,26 @@ public fun <ROUTE : Any> Navigator(
 
 @Composable
 private fun <ROUTE : Any> WithSaveableState(
+    routeId: String,
     navigator: Navigator<ROUTE>,
     content: @Composable () -> Unit,
 ) {
 
-    val backStack = navigator.backStack
-    val currentRouteEntry = backStack.last()
-
-    // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
-    val rootKey = currentCompositeKeyHash.toString(36)
-    val currentRouteIndex = backStack.indexOf(currentRouteEntry)
-
     val saveableStateHolder = rememberSaveableStateHolder()
 
-    val onPopListener = remember {
-        object : BackStackListener<ROUTE> {
-            override fun onAdded(index: Int, route: ROUTE) {}
+    DisposableEffect(navigator) {
 
-            override fun onRemoved(index: Int, route: ROUTE) {
-                saveableStateHolder.removeState("${rootKey}_$index")
-            }
+        val onRouteRemovedListener = BackStackEventListener<ROUTE> { event ->
+            if (event !is BackStackEvent.RouteRemoved) return@BackStackEventListener
+            saveableStateHolder.removeState(event.entry.id)
         }
-    }
 
-    DisposableEffect(navigator, onPopListener) {
-        navigator.addBackStackListener(onPopListener)
-        onDispose { navigator.removeBackStackListener(onPopListener) }
+        navigator.addBackStackEventListener(listener = onRouteRemovedListener)
+        onDispose { navigator.removeBackStackEventListener(onRouteRemovedListener) }
     }
 
     saveableStateHolder.SaveableStateProvider(
-        key = "${rootKey}_$currentRouteIndex",
+        key = routeId,
         content = content,
     )
 }
