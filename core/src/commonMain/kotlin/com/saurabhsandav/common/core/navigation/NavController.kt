@@ -17,6 +17,7 @@ public class NavController<ROUTE : Any> private constructor(
 
     private val _backStack = routeEntries.toMutableStateList()
     private val backStackEventListeners = mutableMapOf<String, BackStackEventListener<ROUTE>>()
+    private var platformOwnerBuilder: PlatformOwner.Builder? = null
 
     public val backStack: List<RouteEntry<ROUTE>>
         get() = _backStack
@@ -27,6 +28,14 @@ public class NavController<ROUTE : Any> private constructor(
     public fun push(route: ROUTE) {
 
         val entry = RouteEntry(route)
+
+        // Build and set PlatformOwner on RouteEntry
+        entry.platformOwner = platformOwnerBuilder?.build(this, entry)
+
+        // Notify PlatformOwners before backstack modification
+        backStack.mapNotNull { it.platformOwner }.forEach { listener ->
+            listener.onChanged(BackStackEvent.RouteAdded(entry))
+        }
 
         // Update Backstack
         _backStack.add(entry)
@@ -41,8 +50,15 @@ public class NavController<ROUTE : Any> private constructor(
 
         if (!canPop) return
 
+        val poppedRouteEntry = _backStack.last()
+
+        // Notify PlatformOwners before backstack modification
+        backStack.mapNotNull { it.platformOwner }.forEach { listener ->
+            listener.onChanged(BackStackEvent.RouteRemoved(poppedRouteEntry))
+        }
+
         // Update Backstack
-        val poppedRouteEntry = _backStack.removeLast()
+        _backStack.removeLast()
 
         // Notify listeners
         backStackEventListeners.values.forEach { listener ->
@@ -63,6 +79,16 @@ public class NavController<ROUTE : Any> private constructor(
 
     public fun removeBackStackEventListener(key: String) {
         backStackEventListeners.remove(key)
+    }
+
+    public fun setPlatformOwnerBuilder(builder: PlatformOwner.Builder) {
+
+        if (platformOwnerBuilder == builder) return
+
+        platformOwnerBuilder = builder
+
+        // Run builder for existing routes
+        backStack.forEach { entry -> entry.platformOwner = builder.build(this, entry) }
     }
 
     public companion object {

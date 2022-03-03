@@ -1,7 +1,6 @@
 package com.saurabhsandav.common.compose.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import com.saurabhsandav.common.core.navigation.*
 
@@ -18,10 +17,16 @@ public fun <ROUTE : Any> NavHost(
 
     val currentRouteEntry = controller.backStack.last()
 
-    WithSaveableState(currentRouteEntry.id, controller) {
-        content(currentRouteEntry, controller.resultHandler.consumeResult())
+    val platformProviders = remember(currentRouteEntry) { currentRouteEntry.buildPlatformProviders() }
+
+    CompositionLocalProvider(*platformProviders) {
+        WithSaveableState(currentRouteEntry.id, controller) {
+            content(currentRouteEntry, controller.resultHandler.consumeResult())
+        }
     }
 }
+
+internal expect fun RouteEntry<*>.buildPlatformProviders(): Array<ProvidedValue<*>>
 
 @Composable
 private fun <ROUTE : Any> WithSaveableState(
