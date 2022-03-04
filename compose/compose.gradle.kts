@@ -67,6 +67,7 @@ kotlin {
 
                 // Jetpack
                 implementation(libs.activity.compose)
+                implementation(libs.lifecycle.viewmodel.compose)
 
                 // Accompanist
                 api(libs.accompanist.insets)

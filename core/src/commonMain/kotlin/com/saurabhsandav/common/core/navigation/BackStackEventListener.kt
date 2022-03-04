@@ -16,4 +16,8 @@ public sealed interface BackStackEvent<ROUTE : Any> {
     public class RouteRemoved<ROUTE : Any>(
         override val entry: RouteEntry<ROUTE>
     ) : BackStackEvent<ROUTE>
+
+    public class RouteVisible<ROUTE : Any>(
+        override val entry: RouteEntry<ROUTE>
+    ) : BackStackEvent<ROUTE>
 }

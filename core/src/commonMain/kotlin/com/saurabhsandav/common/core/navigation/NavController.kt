@@ -4,6 +4,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.toMutableStateList
 import com.benasher44.uuid.uuid4
+import com.saurabhsandav.common.core.navigation.BackStackEvent.*
 
 public class NavController<ROUTE : Any> private constructor(
     public val id: String,
@@ -33,17 +34,19 @@ public class NavController<ROUTE : Any> private constructor(
         entry.platformOwner = platformOwnerBuilder?.build(this, entry)
 
         // Notify PlatformOwners before backstack modification
-        backStack.mapNotNull { it.platformOwner }.forEach { listener ->
-            listener.onChanged(BackStackEvent.RouteAdded(entry))
-        }
+        backStack.mapNotNull { it.platformOwner }.notifyAll(
+            RouteAdded(entry),
+            RouteVisible(entry),
+        )
 
         // Update Backstack
         _backStack.add(entry)
 
         // Notify listeners
-        backStackEventListeners.values.forEach { listener ->
-            listener.onChanged(BackStackEvent.RouteAdded(entry))
-        }
+        backStackEventListeners.values.notifyAll(
+            RouteAdded(entry),
+            RouteVisible(entry),
+        )
     }
 
     public fun pop() {
@@ -51,19 +54,22 @@ public class NavController<ROUTE : Any> private constructor(
         if (!canPop) return
 
         val poppedRouteEntry = _backStack.last()
+        val nextVisibleRouteEntry = backStack[backStack.lastIndex - 1]
 
         // Notify PlatformOwners before backstack modification
-        backStack.mapNotNull { it.platformOwner }.forEach { listener ->
-            listener.onChanged(BackStackEvent.RouteRemoved(poppedRouteEntry))
-        }
+        backStack.mapNotNull { it.platformOwner }.notifyAll(
+            RouteRemoved(poppedRouteEntry),
+            RouteVisible(nextVisibleRouteEntry),
+        )
 
         // Update Backstack
         _backStack.removeLast()
 
         // Notify listeners
-        backStackEventListeners.values.forEach { listener ->
-            listener.onChanged(BackStackEvent.RouteRemoved(poppedRouteEntry))
-        }
+        backStackEventListeners.values.notifyAll(
+            RouteRemoved(poppedRouteEntry),
+            RouteVisible(nextVisibleRouteEntry),
+        )
     }
 
     public fun addBackStackEventListener(
@@ -89,6 +95,10 @@ public class NavController<ROUTE : Any> private constructor(
 
         // Run builder for existing routes
         backStack.forEach { entry -> entry.platformOwner = builder.build(this, entry) }
+    }
+
+    private fun Collection<BackStackEventListener<ROUTE>>.notifyAll(vararg events: BackStackEvent<ROUTE>) {
+        forEach { listener -> events.forEach { event -> listener.onChanged(event) } }
     }
 
     public companion object {
