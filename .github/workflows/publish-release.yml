@@ -22,8 +22,8 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: |
-          build
-          apiCheck
-          publish -Pversion=${{ github.ref_name }}
+            build
+            apiCheck
+            publish -Pversion=${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
