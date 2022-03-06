@@ -15,8 +15,13 @@ public final class com/saurabhsandav/common/compose/insets/PaddingKt {
 	public static synthetic fun systemBarsPadding$default (Landroidx/compose/ui/Modifier;ZILjava/lang/Object;)Landroidx/compose/ui/Modifier;
 }
 
-public final class com/saurabhsandav/common/compose/navigator/NavigatorKt {
-	public static final fun Navigator ([Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;I)V
+public final class com/saurabhsandav/common/compose/navigation/NavControllerKt {
+	public static final fun rememberNavController (Landroidx/compose/runtime/saveable/Saver;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;II)Lcom/saurabhsandav/common/core/navigation/NavController;
+	public static final fun rememberNavControllerPopulated (Landroidx/compose/runtime/saveable/Saver;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;II)Lcom/saurabhsandav/common/core/navigation/NavController;
+}
+
+public final class com/saurabhsandav/common/compose/navigation/NavHostKt {
+	public static final fun NavHost (Lcom/saurabhsandav/common/core/navigation/NavController;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;I)V
 }
 
 public abstract class com/saurabhsandav/common/compose/presenter/Presenter : androidx/compose/runtime/RememberObserver {
