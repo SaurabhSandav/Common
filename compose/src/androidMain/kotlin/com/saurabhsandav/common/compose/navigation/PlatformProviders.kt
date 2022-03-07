@@ -8,12 +8,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.saurabhsandav.common.core.navigation.PlatformOwner
 import com.saurabhsandav.common.core.navigation.RouteEntry
+import com.saurabhsandav.common.core.navigation.RouteOwner
 import com.saurabhsandav.common.core.navigation.ViewModelStoreHolder
 
 @Composable
-internal actual fun rememberPlatformOwnerBuilder(): PlatformOwner.Builder {
+internal actual fun rememberRouteOwnerBuilder(): RouteOwner.Builder {
 
     val hostLifecycleOwner = LocalLifecycleOwner.current
     val hostSavedStateRegistryOwner = LocalSavedStateRegistryOwner.current
@@ -21,7 +21,7 @@ internal actual fun rememberPlatformOwnerBuilder(): PlatformOwner.Builder {
     val viewModelStoreHolder = viewModel<ViewModelStoreHolder>()
 
     return remember {
-        PlatformOwner.Builder(
+        RouteOwner.Builder(
             context = context,
             hostLifecycle = hostLifecycleOwner.lifecycle,
             hostSavedStateRegistry = hostSavedStateRegistryOwner.savedStateRegistry,
@@ -32,11 +32,11 @@ internal actual fun rememberPlatformOwnerBuilder(): PlatformOwner.Builder {
 
 internal actual fun RouteEntry<*>.buildPlatformProviders(): Array<ProvidedValue<*>> {
 
-    val platformOwner = platformOwner ?: return emptyArray()
+    val routeOwner = owner ?: return emptyArray()
 
     return arrayOf(
-        LocalLifecycleOwner provides platformOwner,
-        LocalSavedStateRegistryOwner provides platformOwner,
-        LocalViewModelStoreOwner provides platformOwner,
+        LocalLifecycleOwner provides routeOwner,
+        LocalSavedStateRegistryOwner provides routeOwner,
+        LocalViewModelStoreOwner provides routeOwner,
     )
 }

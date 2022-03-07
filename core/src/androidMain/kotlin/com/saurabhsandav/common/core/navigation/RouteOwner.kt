@@ -10,7 +10,7 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 
-public actual class PlatformOwner<ROUTE : Any>(
+public actual class RouteOwner<ROUTE : Any>(
     private val routeEntry: RouteEntry<ROUTE>,
     private val context: Context?,
     private val hostLifecycle: Lifecycle,
@@ -67,8 +67,8 @@ public actual class PlatformOwner<ROUTE : Any>(
             (context?.applicationContext as? Application)?.let { application ->
                 this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] = application
             }
-            this[SAVED_STATE_REGISTRY_OWNER_KEY] = this@PlatformOwner
-            this[VIEW_MODEL_STORE_OWNER_KEY] = this@PlatformOwner
+            this[SAVED_STATE_REGISTRY_OWNER_KEY] = this@RouteOwner
+            this[VIEW_MODEL_STORE_OWNER_KEY] = this@RouteOwner
         }
     }
 
@@ -101,8 +101,8 @@ public actual class PlatformOwner<ROUTE : Any>(
         public actual fun <ROUTE : Any> build(
             navController: NavController<ROUTE>,
             routeEntry: RouteEntry<ROUTE>,
-        ): PlatformOwner<ROUTE> {
-            return PlatformOwner(
+        ): RouteOwner<ROUTE> {
+            return RouteOwner(
                 routeEntry,
                 context,
                 hostLifecycle,

@@ -34,7 +34,7 @@ public final class com/saurabhsandav/common/core/navigation/NavController {
 	public final fun push (Ljava/lang/Object;)V
 	public final fun removeBackStackEventListener (Lcom/saurabhsandav/common/core/navigation/BackStackEventListener;)V
 	public final fun removeBackStackEventListener (Ljava/lang/String;)V
-	public final fun setPlatformOwnerBuilder (Lcom/saurabhsandav/common/core/navigation/PlatformOwner$Builder;)V
+	public final fun setRouteOwnerBuilder (Lcom/saurabhsandav/common/core/navigation/RouteOwner$Builder;)V
 }
 
 public final class com/saurabhsandav/common/core/navigation/NavController$Companion {
@@ -48,16 +48,6 @@ public final class com/saurabhsandav/common/core/navigation/NavControllerActions
 	public static final fun push (Lcom/saurabhsandav/common/core/navigation/NavController;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun push$default (Lcom/saurabhsandav/common/core/navigation/NavController;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static final fun replace (Lcom/saurabhsandav/common/core/navigation/NavController;Ljava/lang/Object;)V
-}
-
-public final class com/saurabhsandav/common/core/navigation/PlatformOwner : com/saurabhsandav/common/core/navigation/BackStackEventListener {
-	public fun <init> ()V
-	public fun onChanged (Lcom/saurabhsandav/common/core/navigation/BackStackEvent;)V
-}
-
-public final class com/saurabhsandav/common/core/navigation/PlatformOwner$Builder {
-	public fun <init> ()V
-	public final fun build (Lcom/saurabhsandav/common/core/navigation/NavController;Lcom/saurabhsandav/common/core/navigation/RouteEntry;)Lcom/saurabhsandav/common/core/navigation/PlatformOwner;
 }
 
 public final class com/saurabhsandav/common/core/navigation/ResultHandler {
@@ -76,7 +66,7 @@ public final class com/saurabhsandav/common/core/navigation/RouteEntry {
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getId ()Ljava/lang/String;
 	public final fun getKey ()Ljava/lang/Object;
-	public final fun getPlatformOwner ()Lcom/saurabhsandav/common/core/navigation/PlatformOwner;
+	public final fun getOwner ()Lcom/saurabhsandav/common/core/navigation/RouteOwner;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lcom/saurabhsandav/common/core/navigation/RouteEntry;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;Lkotlinx/serialization/KSerializer;)V
@@ -96,6 +86,16 @@ public final class com/saurabhsandav/common/core/navigation/RouteEntry$$serializ
 
 public final class com/saurabhsandav/common/core/navigation/RouteEntry$Companion {
 	public final fun serializer (Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/saurabhsandav/common/core/navigation/RouteOwner : com/saurabhsandav/common/core/navigation/BackStackEventListener {
+	public fun <init> ()V
+	public fun onChanged (Lcom/saurabhsandav/common/core/navigation/BackStackEvent;)V
+}
+
+public final class com/saurabhsandav/common/core/navigation/RouteOwner$Builder {
+	public fun <init> ()V
+	public final fun build (Lcom/saurabhsandav/common/core/navigation/NavController;Lcom/saurabhsandav/common/core/navigation/RouteEntry;)Lcom/saurabhsandav/common/core/navigation/RouteOwner;
 }
 
 public abstract interface class com/saurabhsandav/common/core/navigation/RouteResult {

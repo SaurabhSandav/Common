@@ -11,6 +11,6 @@ public data class RouteEntry<ROUTE : Any>(
 ) {
 
     @Transient
-    var platformOwner: PlatformOwner<ROUTE>? = null
+    var owner: RouteOwner<ROUTE>? = null
         internal set
 }

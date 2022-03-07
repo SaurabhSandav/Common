@@ -18,7 +18,7 @@ public class NavController<ROUTE : Any> private constructor(
 
     private val _backStack = routeEntries.toMutableStateList()
     private val backStackEventListeners = mutableMapOf<String, BackStackEventListener<ROUTE>>()
-    private var platformOwnerBuilder: PlatformOwner.Builder? = null
+    private var routeOwnerBuilder: RouteOwner.Builder? = null
 
     public val backStack: List<RouteEntry<ROUTE>>
         get() = _backStack
@@ -30,11 +30,11 @@ public class NavController<ROUTE : Any> private constructor(
 
         val entry = RouteEntry(route)
 
-        // Build and set PlatformOwner on RouteEntry
-        entry.platformOwner = platformOwnerBuilder?.build(this, entry)
+        // Build and set RouteOwner on RouteEntry
+        entry.owner = routeOwnerBuilder?.build(this, entry)
 
-        // Notify PlatformOwners before backstack modification
-        backStack.mapNotNull { it.platformOwner }.notifyAll(
+        // Notify RouteOwners before backstack modification
+        backStack.mapNotNull { it.owner }.notifyAll(
             RouteAdded(entry),
             RouteVisible(entry),
         )
@@ -56,8 +56,8 @@ public class NavController<ROUTE : Any> private constructor(
         val poppedRouteEntry = _backStack.last()
         val nextVisibleRouteEntry = backStack[backStack.lastIndex - 1]
 
-        // Notify PlatformOwners before backstack modification
-        backStack.mapNotNull { it.platformOwner }.notifyAll(
+        // Notify RouteOwners before backstack modification
+        backStack.mapNotNull { it.owner }.notifyAll(
             RouteRemoved(poppedRouteEntry),
             RouteVisible(nextVisibleRouteEntry),
         )
@@ -87,14 +87,14 @@ public class NavController<ROUTE : Any> private constructor(
         backStackEventListeners.remove(key)
     }
 
-    public fun setPlatformOwnerBuilder(builder: PlatformOwner.Builder) {
+    public fun setRouteOwnerBuilder(builder: RouteOwner.Builder) {
 
-        if (platformOwnerBuilder == builder) return
+        if (routeOwnerBuilder == builder) return
 
-        platformOwnerBuilder = builder
+        routeOwnerBuilder = builder
 
         // Run builder for existing routes
-        backStack.forEach { entry -> entry.platformOwner = builder.build(this, entry) }
+        backStack.forEach { entry -> entry.owner = builder.build(this, entry) }
     }
 
     private fun Collection<BackStackEventListener<ROUTE>>.notifyAll(vararg events: BackStackEvent<ROUTE>) {

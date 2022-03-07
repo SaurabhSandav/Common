@@ -7,7 +7,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.autoSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.saurabhsandav.common.core.navigation.NavController
-import com.saurabhsandav.common.core.navigation.PlatformOwner
+import com.saurabhsandav.common.core.navigation.RouteOwner
 
 @Composable
 public fun <ROUTE : Any> rememberNavController(
@@ -34,12 +34,12 @@ public fun <ROUTE : Any> rememberNavControllerPopulated(
 
     val controller = rememberSaveable(saver = saver) { NavController(initial(), id) }
 
-    // Set PlatformOwnerBuilder
-    val platformOwnerBuilder = rememberPlatformOwnerBuilder()
-    controller.setPlatformOwnerBuilder(platformOwnerBuilder)
+    // Set RouteOwnerBuilder
+    val routeOwnerBuilder = rememberRouteOwnerBuilder()
+    controller.setRouteOwnerBuilder(routeOwnerBuilder)
 
     return controller
 }
 
 @Composable
-internal expect fun rememberPlatformOwnerBuilder(): PlatformOwner.Builder
+internal expect fun rememberRouteOwnerBuilder(): RouteOwner.Builder
