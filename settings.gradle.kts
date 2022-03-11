@@ -10,7 +10,6 @@ pluginManagement {
 
 listOf(
     "TYPESAFE_PROJECT_ACCESSORS",
-    "VERSION_CATALOGS",
 ).forEach { enableFeaturePreview(it) }
 
 @Suppress("PropertyName")
