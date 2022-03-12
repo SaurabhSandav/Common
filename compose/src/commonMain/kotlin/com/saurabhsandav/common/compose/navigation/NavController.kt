@@ -9,6 +9,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import com.saurabhsandav.common.core.navigation.NavController
 import com.saurabhsandav.common.core.navigation.RouteOwner
 
+/**
+ * Create and remember a [NavController] instance.
+ *
+ * * Handles saving NavController state.
+ * * Sets a [RouteOwner.Builder] on [NavController].
+ *
+ * @param[routeSaver] Used to save [ROUTE] instance. If not provided, NavController is not saved.
+ * @param[id] Unique id. Optionally auto-generated.
+ * @param[initial] Provide/Build initial route key.
+ */
 @Composable
 public fun <ROUTE : Any> rememberNavController(
     routeSaver: Saver<ROUTE, Any>? = null,
@@ -17,6 +27,16 @@ public fun <ROUTE : Any> rememberNavController(
     initial: () -> ROUTE,
 ): NavController<ROUTE> = rememberNavControllerPopulated(routeSaver, id) { listOf(initial()) }
 
+/**
+ * Create and remember a [NavController] instance, pre-populated with multiple routes.
+ *
+ * * Handles saving NavController state.
+ * * Sets a [RouteOwner.Builder] on [NavController].
+ *
+ * @param[routeSaver] Used to save [ROUTE] instance. If not provided, NavController is not saved.
+ * @param[id] Unique id. Optionally auto-generated.
+ * @param[initial] Provide/Build initial route keys.
+ */
 @Composable
 public fun <ROUTE : Any> rememberNavControllerPopulated(
     routeSaver: Saver<ROUTE, Any>? = null,

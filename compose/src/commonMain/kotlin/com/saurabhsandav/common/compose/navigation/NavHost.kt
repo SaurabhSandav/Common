@@ -4,6 +4,15 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import com.saurabhsandav.common.core.navigation.*
 
+/**
+ * Configure Navigation in compose using a [NavController] instance.
+ *
+ * * Provides appropriate CompositionLocals based on platform if [RouteOwner.Builder] is set on [NavController].
+ * * Pops routes on back press.
+ *
+ * @param[controller] An instance of [NavController].
+ * @param[content] Composable block to build UI based on provided [RouteEntry] and [RouteResult].
+ */
 @Composable
 public fun <ROUTE : Any> NavHost(
     controller: NavController<ROUTE>,
