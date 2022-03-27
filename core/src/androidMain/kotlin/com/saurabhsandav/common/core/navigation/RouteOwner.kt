@@ -27,7 +27,9 @@ public actual class RouteOwner<ROUTE : Any>(
     }
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val savedStateRegistryController = SavedStateRegistryController.create(this)
-    private val defaultFactory by lazy { SavedStateViewModelFactory() }
+    private val defaultFactory by lazy {
+        SavedStateViewModelFactory((context?.applicationContext as? Application), this, null)
+    }
     private var savedStateRegistryAttached = false
 
     init {
