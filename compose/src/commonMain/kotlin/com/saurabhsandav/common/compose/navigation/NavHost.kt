@@ -24,7 +24,8 @@ public fun <ROUTE : Any> NavHost(
         onBack = { controller.pop() },
     )
 
-    val currentRouteEntry = controller.backStack.last()
+    val backStack by controller.backStack.collectAsState()
+    val currentRouteEntry = backStack.last()
 
     val platformProviders = remember(currentRouteEntry) { currentRouteEntry.buildPlatformProviders() }
 

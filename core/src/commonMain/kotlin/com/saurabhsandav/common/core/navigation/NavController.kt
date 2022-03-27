@@ -1,11 +1,10 @@
 package com.saurabhsandav.common.core.navigation
 
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import com.benasher44.uuid.uuid4
 import com.saurabhsandav.common.core.navigation.BackStackEvent.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Pure Kotlin implementation of Navigation.
@@ -26,15 +25,14 @@ public class NavController<ROUTE : Any> private constructor(
             error("NavController needs an initial route")
     }
 
-    private val _backStack = routeEntries.toMutableStateList()
+    private val _backStack = MutableStateFlow(routeEntries)
     private val backStackEventListeners = mutableMapOf<String, BackStackEventListener<ROUTE>>()
     private var routeOwnerBuilder: RouteOwner.Builder? = null
 
     /**
-     * [SnapshotStateList] of [RouteEntries][RouteEntry].
+     * [StateFlow] of [RouteEntries][RouteEntry].
      */
-    public val backStack: List<RouteEntry<ROUTE>>
-        get() = _backStack
+    public val backStack: StateFlow<List<RouteEntry<ROUTE>>> = _backStack.asStateFlow()
 
     /**
      * Pass results between routes.
@@ -44,7 +42,8 @@ public class NavController<ROUTE : Any> private constructor(
     /**
      * Can backstack be popped? True only when backstack has 2 or more entries.
      */
-    public val canPop: Boolean by derivedStateOf { backStack.size >= 2 }
+    public val canPop: Boolean
+        get() = backStack.value.size >= 2
 
     /**
      * Push new [route] on the backstack.
@@ -63,13 +62,13 @@ public class NavController<ROUTE : Any> private constructor(
         entry.owner = routeOwnerBuilder?.build(this, entry)
 
         // Notify RouteOwners before backstack modification
-        backStack.mapNotNull { it.owner }.notifyAll(
+        backStack.value.mapNotNull { it.owner }.notifyAll(
             RouteAdded(entry),
             RouteVisible(entry),
         )
 
         // Update Backstack
-        _backStack.add(entry)
+        _backStack.value = backStack.value + entry
 
         // Notify listeners
         backStackEventListeners.values.notifyAll(
@@ -87,17 +86,17 @@ public class NavController<ROUTE : Any> private constructor(
 
         if (!canPop) return
 
-        val poppedRouteEntry = _backStack.last()
-        val nextVisibleRouteEntry = backStack[backStack.lastIndex - 1]
+        val poppedRouteEntry = backStack.value.last()
+        val nextVisibleRouteEntry = backStack.value[backStack.value.lastIndex - 1]
 
         // Notify RouteOwners before backstack modification
-        backStack.mapNotNull { it.owner }.notifyAll(
+        backStack.value.mapNotNull { it.owner }.notifyAll(
             RouteRemoved(poppedRouteEntry),
             RouteVisible(nextVisibleRouteEntry),
         )
 
         // Update Backstack
-        _backStack.removeLast()
+        _backStack.value = backStack.value.dropLast(1)
 
         // Notify listeners
         backStackEventListeners.values.notifyAll(
@@ -143,7 +142,7 @@ public class NavController<ROUTE : Any> private constructor(
         routeOwnerBuilder = builder
 
         // Run builder for existing routes
-        backStack.forEach { entry -> entry.owner = builder.build(this, entry) }
+        backStack.value.forEach { entry -> entry.owner = builder.build(this, entry) }
     }
 
     private fun Collection<BackStackEventListener<ROUTE>>.notifyAll(vararg events: BackStackEvent<ROUTE>) {

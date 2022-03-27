@@ -49,9 +49,6 @@ kotlin {
                 // KotlinX Serialization
                 implementation(libs.kotlinx.serialization.core)
 
-                // Compose Runtime
-                implementation(libs.jetbrains.compose.runtime)
-
                 // UUID
                 implementation(libs.uuid)
 

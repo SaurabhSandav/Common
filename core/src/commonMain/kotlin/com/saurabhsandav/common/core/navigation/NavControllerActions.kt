@@ -1,7 +1,5 @@
 package com.saurabhsandav.common.core.navigation
 
-import androidx.compose.runtime.snapshots.Snapshot
-
 /**
  * Push a new [route] on top of backstack.
  *
@@ -12,14 +10,11 @@ public fun <ROUTE : Any> NavController<ROUTE>.push(
     popWhile: (ROUTE) -> Boolean = { false },
 ) {
 
-    Snapshot.withMutableSnapshot {
-
-        while (popWhile(backStack.last().key)) {
-            pop()
-        }
-
-        push(route)
+    while (popWhile(backStack.value.last().key)) {
+        pop()
     }
+
+    push(route)
 }
 
 /**
@@ -36,8 +31,6 @@ public fun <ROUTE : Any> NavController<ROUTE>.popWithResult(result: RouteResult)
  * Replace current route in the backstack.
  */
 public fun <ROUTE : Any> NavController<ROUTE>.replace(newRoute: ROUTE) {
-    Snapshot.withMutableSnapshot {
-        pop()
-        push(newRoute)
-    }
+    pop()
+    push(newRoute)
 }
