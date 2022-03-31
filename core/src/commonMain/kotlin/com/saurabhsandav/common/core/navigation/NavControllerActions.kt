@@ -3,18 +3,22 @@ package com.saurabhsandav.common.core.navigation
 /**
  * Push a new [route] on top of backstack.
  *
- * @param[popWhile] Optional. Pop routes while condition is satisfied.
+ * @param[popWhile] Optional. Pop routes while condition is met.
  */
 public fun <ROUTE : Any> NavController<ROUTE>.push(
     route: ROUTE,
     popWhile: (ROUTE) -> Boolean = { false },
 ) {
-
-    while (popWhile(backStack.value.last().key)) {
-        pop()
+    transformBackStack { current ->
+        current.dropLastWhile { popWhile(it.key) } + RouteEntry(route)
     }
+}
 
-    push(route)
+/**
+ * Pop current route from the backstack.
+ */
+public fun <ROUTE : Any> NavController<ROUTE>.pop() {
+    transformBackStack { current -> current.dropLast(1) }
 }
 
 /**
@@ -28,9 +32,10 @@ public fun <ROUTE : Any> NavController<ROUTE>.popWithResult(result: RouteResult)
 }
 
 /**
- * Replace current route in the backstack.
+ * Replace current route in the backstack with [newRoute].
  */
 public fun <ROUTE : Any> NavController<ROUTE>.replace(newRoute: ROUTE) {
-    pop()
-    push(newRoute)
+    transformBackStack { current ->
+        current.dropLast(1) + RouteEntry(newRoute)
+    }
 }

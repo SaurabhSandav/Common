@@ -46,63 +46,53 @@ public class NavController<ROUTE : Any> private constructor(
         get() = backStack.value.size >= 2
 
     /**
-     * Push new [route] on the backstack.
+     * Transform backstack.
      *
-     * * Creates a new [RouteEntry] for [route].
-     * * Sets a [RouteOwner] on [RouteEntry] if [setRouteOwnerBuilder] was called.
+     * * Sets a [RouteOwner] on newly added RouteEntries if [RouteOwner.Builder] is set.
      * * Dispatches [RouteAdded] and [RouteVisible] events to [BackStackEventListener].
      *
-     * @param[route] Key for new route.
+     * Note: If [transformation] returns an empty list, it is ignored.
+     *
+     * @param[transformation] Key for new route.
      */
-    public fun push(route: ROUTE) {
+    public fun transformBackStack(transformation: (List<RouteEntry<ROUTE>>) -> List<RouteEntry<ROUTE>>) {
 
-        val entry = RouteEntry(route)
+        val current = backStack.value
+        val transformed = transformation(backStack.value)
 
-        // Build and set RouteOwner on RouteEntry
-        entry.owner = routeOwnerBuilder?.build(this, entry)
+        if (transformed.isEmpty()) return
 
-        // Notify RouteOwners before backstack modification
-        backStack.value.mapNotNull { it.owner }.notifyAll(
-            RouteAdded(entry),
-            RouteVisible(entry),
-        )
+        val added = transformed - current.toSet()
+        val removed = current - transformed.toSet()
+
+        // Build transformation event list
+        val events = buildList {
+            addAll(removed.map { RouteRemoved(it) })
+            addAll(added.map { RouteAdded(it) })
+            add(RouteVisible(transformed.last()))
+        }
+
+        // Build and set RouteOwner on newly added RouteEntries
+        routeOwnerBuilder?.run {
+            added.forEach { entry ->
+                entry.owner = build(this@NavController, entry)
+            }
+        }
+
+        fun Collection<BackStackEventListener<ROUTE>>.notifyAll(events: List<BackStackEvent<ROUTE>>) {
+            events.forEach { event ->
+                forEach { listener -> listener.onChanged(event) }
+            }
+        }
+
+        // Notify RouteOwners before backstack update
+        backStack.value.mapNotNull { it.owner }.notifyAll(events)
 
         // Update Backstack
-        _backStack.value = backStack.value + entry
+        _backStack.value = transformed
 
         // Notify listeners
-        backStackEventListeners.values.notifyAll(
-            RouteAdded(entry),
-            RouteVisible(entry),
-        )
-    }
-
-
-    /**
-     * Pop current route from the backstack.
-     * Dispatches [RouteRemoved] and [RouteVisible] events to [BackStackEventListener].
-     */
-    public fun pop() {
-
-        if (!canPop) return
-
-        val poppedRouteEntry = backStack.value.last()
-        val nextVisibleRouteEntry = backStack.value[backStack.value.lastIndex - 1]
-
-        // Notify RouteOwners before backstack modification
-        backStack.value.mapNotNull { it.owner }.notifyAll(
-            RouteRemoved(poppedRouteEntry),
-            RouteVisible(nextVisibleRouteEntry),
-        )
-
-        // Update Backstack
-        _backStack.value = backStack.value.dropLast(1)
-
-        // Notify listeners
-        backStackEventListeners.values.notifyAll(
-            RouteRemoved(poppedRouteEntry),
-            RouteVisible(nextVisibleRouteEntry),
-        )
+        backStackEventListeners.values.notifyAll(events)
     }
 
     /**
@@ -143,10 +133,6 @@ public class NavController<ROUTE : Any> private constructor(
 
         // Run builder for existing routes
         backStack.value.forEach { entry -> entry.owner = builder.build(this, entry) }
-    }
-
-    private fun Collection<BackStackEventListener<ROUTE>>.notifyAll(vararg events: BackStackEvent<ROUTE>) {
-        forEach { listener -> events.forEach { event -> listener.onChanged(event) } }
     }
 
     public companion object {

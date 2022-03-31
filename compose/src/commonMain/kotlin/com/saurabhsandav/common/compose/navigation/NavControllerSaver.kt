@@ -21,7 +21,7 @@ internal fun <ROUTE : Any> NavControllerSaver(
 
             saved.add(navController.id)
 
-            navController.backStack.mapTo(saved) { entry ->
+            navController.backStack.value.mapTo(saved) { entry ->
                 with(routeEntrySaver) {
                     SaverScope { true }.save(entry)!!
                 }
