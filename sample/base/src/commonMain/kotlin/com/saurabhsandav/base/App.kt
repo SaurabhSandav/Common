@@ -6,7 +6,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.saurabhsandav.base.screen.common.theme.AppTheme
@@ -32,11 +31,7 @@ internal fun App() {
 @Composable
 private fun AppNavigator() {
 
-    val routeGenerator = remember {
-        generateSequence(0) { it + 1 }.map { "Route#$it" }.iterator()
-    }
-
-    val controller = rememberNavController(serializableSaver()) { listOf(routeGenerator.next()) }
+    val controller = rememberNavController(0, serializableSaver())
 
     NavHost(controller) { currentRoute, _ ->
 
@@ -46,7 +41,7 @@ private fun AppNavigator() {
         ) {
 
             Text(
-                text = "Route Key - ${currentRoute.key}",
+                text = "Route#${currentRoute.key}",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
@@ -55,7 +50,7 @@ private fun AppNavigator() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
 
-                Button(onClick = { controller.push(routeGenerator.next()) }) {
+                Button(onClick = { controller.push(currentRoute.key + 1) }) {
                     Text("Push")
                 }
 
