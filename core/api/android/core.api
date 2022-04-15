@@ -26,15 +26,14 @@ public final class com/saurabhsandav/common/core/navigation/NavController {
 	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addBackStackEventListener (Ljava/lang/String;Lcom/saurabhsandav/common/core/navigation/BackStackEventListener;)V
 	public static synthetic fun addBackStackEventListener$default (Lcom/saurabhsandav/common/core/navigation/NavController;Ljava/lang/String;Lcom/saurabhsandav/common/core/navigation/BackStackEventListener;ILjava/lang/Object;)V
-	public final fun getBackStack ()Ljava/util/List;
+	public final fun getBackStack ()Lkotlinx/coroutines/flow/StateFlow;
 	public final fun getCanPop ()Z
 	public final fun getId ()Ljava/lang/String;
 	public final fun getResultHandler ()Lcom/saurabhsandav/common/core/navigation/ResultHandler;
-	public final fun pop ()V
-	public final fun push (Ljava/lang/Object;)V
 	public final fun removeBackStackEventListener (Lcom/saurabhsandav/common/core/navigation/BackStackEventListener;)V
 	public final fun removeBackStackEventListener (Ljava/lang/String;)V
 	public final fun setRouteOwnerBuilder (Lcom/saurabhsandav/common/core/navigation/RouteOwner$Builder;)V
+	public final fun transformBackStack (Lkotlin/jvm/functions/Function1;)V
 }
 
 public final class com/saurabhsandav/common/core/navigation/NavController$Companion {
@@ -44,6 +43,7 @@ public final class com/saurabhsandav/common/core/navigation/NavController$Compan
 }
 
 public final class com/saurabhsandav/common/core/navigation/NavControllerActionsKt {
+	public static final fun pop (Lcom/saurabhsandav/common/core/navigation/NavController;)V
 	public static final fun popWithResult (Lcom/saurabhsandav/common/core/navigation/NavController;Lcom/saurabhsandav/common/core/navigation/RouteResult;)V
 	public static final fun push (Lcom/saurabhsandav/common/core/navigation/NavController;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun push$default (Lcom/saurabhsandav/common/core/navigation/NavController;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V

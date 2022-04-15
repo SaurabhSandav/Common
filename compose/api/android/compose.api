@@ -17,7 +17,7 @@ public final class com/saurabhsandav/common/compose/insets/PaddingKt {
 
 public final class com/saurabhsandav/common/compose/navigation/NavControllerKt {
 	public static final fun rememberNavController (Landroidx/compose/runtime/saveable/Saver;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;II)Lcom/saurabhsandav/common/core/navigation/NavController;
-	public static final fun rememberNavControllerPopulated (Landroidx/compose/runtime/saveable/Saver;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;II)Lcom/saurabhsandav/common/core/navigation/NavController;
+	public static final fun rememberNavController (Ljava/lang/Object;Landroidx/compose/runtime/saveable/Saver;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)Lcom/saurabhsandav/common/core/navigation/NavController;
 }
 
 public final class com/saurabhsandav/common/compose/navigation/NavHostKt {
