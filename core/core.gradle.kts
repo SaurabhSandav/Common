@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.saurabhsandav.common"
-version = "0.2.0-RC1"
+version = "0.2.0"
 
 kotlin {
 
