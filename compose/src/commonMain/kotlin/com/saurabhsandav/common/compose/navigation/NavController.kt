@@ -17,15 +17,15 @@ import com.saurabhsandav.common.core.navigation.RouteOwner
  *
  * @param[routeSaver] Used to save [ROUTE] instance. If not provided, NavController is not saved.
  * @param[id] Unique id. Optionally auto-generated.
- * @param[initial] Provide/Build initial route key.
+ * @param[initial] Initial route key.
  */
 @Composable
 public fun <ROUTE : Any> rememberNavController(
+    initial: ROUTE,
     routeSaver: Saver<ROUTE, Any>? = null,
     // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
     id: String = currentCompositeKeyHash.toString(radix = 36),
-    initial: () -> ROUTE,
-): NavController<ROUTE> = rememberNavControllerPopulated(routeSaver, id) { listOf(initial()) }
+): NavController<ROUTE> = rememberNavController(routeSaver, id) { listOf(initial) }
 
 /**
  * Create and remember a [NavController] instance, pre-populated with multiple routes.
@@ -38,7 +38,7 @@ public fun <ROUTE : Any> rememberNavController(
  * @param[initial] Provide/Build initial route keys.
  */
 @Composable
-public fun <ROUTE : Any> rememberNavControllerPopulated(
+public fun <ROUTE : Any> rememberNavController(
     routeSaver: Saver<ROUTE, Any>? = null,
     // Why Radix? -> https://android-review.googlesource.com/c/platform/frameworks/support/+/1752326/
     id: String = currentCompositeKeyHash.toString(radix = 36),

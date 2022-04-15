@@ -36,7 +36,7 @@ private fun AppNavigator() {
         generateSequence(0) { it + 1 }.map { "Route#$it" }.iterator()
     }
 
-    val controller = rememberNavController(serializableSaver()) { routeGenerator.next() }
+    val controller = rememberNavController(serializableSaver()) { listOf(routeGenerator.next()) }
 
     NavHost(controller) { currentRoute, _ ->
 
