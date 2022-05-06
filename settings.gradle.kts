@@ -24,6 +24,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        mavenLocal()
         maven {
             url = uri("https://maven.pkg.github.com/saurabhsandav/CommonVersions")
             credentials {
@@ -36,7 +37,7 @@ dependencyResolutionManagement {
     versionCatalogs {
 
         create("libs") {
-            from("com.saurabhsandav:common-versions:0.38.0")
+            from("com.saurabhsandav:common-versions:0.53.0")
         }
     }
 }

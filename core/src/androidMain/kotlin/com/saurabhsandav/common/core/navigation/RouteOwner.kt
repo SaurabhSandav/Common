@@ -74,7 +74,8 @@ public actual class RouteOwner<ROUTE : Any>(
         }
     }
 
-    override fun getSavedStateRegistry(): SavedStateRegistry = savedStateRegistryController.savedStateRegistry
+    override val savedStateRegistry: SavedStateRegistry
+        get() = savedStateRegistryController.savedStateRegistry
 
     private fun configureSavedState() {
 
