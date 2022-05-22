@@ -29,8 +29,8 @@ dependencies {
     implementation(projects.sample.base)
 
     // Activity
-    implementation(libs.activity.ktx)
-    implementation(libs.activity.compose)
+    implementation(libs.jetpack.activity.ktx)
+    implementation(libs.jetpack.activity.compose)
 
     // Compose
     implementation(compose.runtime)

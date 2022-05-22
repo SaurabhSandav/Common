@@ -59,7 +59,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.android)
 
                 // Jetpack
-                implementation(libs.activity.compose)
+                implementation(libs.jetpack.activity.compose)
             }
         }
 

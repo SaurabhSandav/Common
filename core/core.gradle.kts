@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.plugin.serialization)
-    alias(libs.plugins.jetbrains.dokka)
+    alias(libs.plugins.dokka)
     id("maven-publish")
 }
 
@@ -71,7 +71,7 @@ kotlin {
             dependencies {
 
                 // Jetpack
-                implementation(libs.activity.compose)
+                implementation(libs.jetpack.activity.compose)
 
                 // Accompanist
                 api(libs.accompanist.insets)
