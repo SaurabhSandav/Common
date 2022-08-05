@@ -11,6 +11,16 @@ plugins {
     alias(libs.plugins.dokka)
 }
 
+allprojects {
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute(module("org.jetbrains.compose.compiler:compiler")).apply {
+                using(module("androidx.compose.compiler:compiler:1.2.1-dev-k1.7.10-27cf0868d10"))
+            }
+        }
+    }
+}
+
 apiValidation {
     // Ignore all sample projects, since they're not part of our API.
     // Only leaf project name is valid configuration, and every project must be individually ignored.

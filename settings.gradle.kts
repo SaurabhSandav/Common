@@ -24,6 +24,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://androidx.dev/storage/compose-compiler/repository/")
         mavenLocal()
         maven {
             url = uri("https://maven.pkg.github.com/saurabhsandav/CommonVersions")
@@ -37,7 +38,7 @@ dependencyResolutionManagement {
     versionCatalogs {
 
         create("libs") {
-            from("com.saurabhsandav:common-versions:0.57.0")
+            from("com.saurabhsandav:common-versions:0.61.0")
         }
     }
 }
