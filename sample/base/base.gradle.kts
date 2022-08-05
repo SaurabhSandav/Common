@@ -22,6 +22,15 @@ kotlin {
 
     sourceSets {
 
+        // FIXME IDE/Gradle show warnings related to this sourceset https://youtrack.jetbrains.com/issue/KT-48436
+        val sourceSetsToDisable = listOf(
+            "androidAndroidTestRelease",
+            "androidTestFixtures",
+            "androidTestFixturesDebug",
+            "androidTestFixturesRelease",
+        )
+        removeAll { it.name in sourceSetsToDisable }
+
         all {
 
             languageSettings {
