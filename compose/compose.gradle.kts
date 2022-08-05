@@ -89,7 +89,7 @@ android {
         targetSdk = 31
     }
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    namespace = "com.saurabhsandav.common.compose"
 }
 
 val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
