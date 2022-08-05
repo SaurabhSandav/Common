@@ -109,11 +109,11 @@ kotlin {
 
 android {
 
-    compileSdk = 31
+    compileSdk = 32
 
     defaultConfig {
         minSdk = 28
-        targetSdk = 31
+        targetSdk = 32
     }
 
     namespace = "com.saurabhsandav.common.core"
